@@ -9,6 +9,13 @@ def count_even_notcoprime(number)
   count
 end
 
+def max_dig_notdiv3(number)
+  answ = -1
+  number.digits.each {|dig| answ = dig if dig > answ and not (dig%3).zero?}
+  answ
+end
+
 puts 'Введите число:'
 number = STDIN.gets.to_i
 puts "Количество четных и невзаимно простых с данным: #{count_even_notcoprime(number)}"
+puts "Максимальная цифра числа, не делящаяся на 3: #{max_dig_notdiv3(number)}"
