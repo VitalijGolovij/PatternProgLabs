@@ -35,4 +35,9 @@ def val_btw_first_last_max(array)
   end
 end
 
-val_btw_first_last_max([5,1,1,5,2,2,5,3,3,6])
+def min_even(array)
+  answ = array[0]
+  array.each{|val| answ = val if val < answ and (val % 2).zero?}
+  answ
+end
+
