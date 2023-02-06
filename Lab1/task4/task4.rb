@@ -11,4 +11,28 @@ def val_btw_first_two_max(array)
   array[max_idx1+1...max_idx2]
 end
 
+def val_btw_first_last_max(array)
+  first_idx = 0
+  last_idx = array.index(array.max)
+  first_max = array.min
+  last_max = array.min
+  array.map.with_index do
+     |cur_val, cur_idx|
+    if cur_val > last_max
+      first_idx = last_idx
+      last_idx = cur_idx
+      first_max = last_max
+      last_max = cur_val
+      else if last_max >= cur_val and cur_val >= first_max
+             first_idx = cur_idx
+           end
+    end
+  end
+  if first_idx > last_idx
+    array[last_idx+1...first_idx]
+  else
+    array[first_idx+1...last_idx]
+  end
+end
 
+val_btw_first_last_max([5,1,1,5,2,2,5,3,3,6])
