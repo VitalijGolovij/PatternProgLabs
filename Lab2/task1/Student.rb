@@ -1,7 +1,6 @@
 class Student
-  attr_accessor :id, :surname, :name, :patronymic,
-                :telegram, :mail, :git
-  attr_reader :phone
+  attr_reader :phone, :id, :surname, :name, :patronymic,
+              :telegram, :mail, :git
 
   def initialize(name, surname, patronymic, options = {})
     self.name = name
@@ -19,6 +18,41 @@ class Student
     @phone = other
   end
 
+  def name=(other)
+    raise ArgumentError, "arg '#{other}' is not valid for name" unless Student.is_name?(other)
+    @name = other
+  end
+
+  def surname=(other)
+    raise ArgumentError, "arg '#{other}' is not valid for surname" unless Student.is_name?(other)
+    @surname = other
+  end
+
+  def patronymic=(other)
+    raise ArgumentError, "arg '#{other}' is not valid for patronymic" unless Student.is_name?(other)
+    @patronymic = other
+  end
+
+  def id=(other)
+    raise ArgumentError, "arg '#{other}' is not valid for id (must be int)" if other.class != Integer
+    raise ArgumentError, "arg '#{other}' is not valid for id (must be greater than zero)" if other < 0
+    @id = other
+  end
+
+  def mail=(other)
+    raise ArgumentError, "arg '#{other}' is not valid for mail (must be string)" unless Student.is_mail?(other)
+    @mail = other
+  end
+
+  def telegram=(other)
+    raise ArgumentError, "arg '#{other}' is not valid for telegram (must be string)" unless Student.is_telegram?(other)
+    @telegram = other
+  end
+
+  def git=(other)
+    raise ArgumentError, "arg '#{other}' is not valid for id (must be int)" unless Student.is_git?(other)
+    @git = other
+  end
   def print
     puts "Information about student"
     puts "id: #{self.id}" unless self.id.nil?
@@ -34,6 +68,30 @@ class Student
   def self.is_phone?(phone)
     raise ArgumentError, "arg '#{phone}' is not string" unless phone.class == String or phone.nil?
     return true if phone=~/^(\+7|8)\s?(\(\d{3}\)|\d{3})[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}/ or phone.nil?
+    false
+  end
+
+  def self.is_name?(name)
+    raise ArgumentError, "arg '#{name}' is not string" unless name.class == String
+    return true if name=~/^[А-Яа-я]+$/
+    false
+  end
+
+  def self.is_mail?(mail)
+    raise ArgumentError, "arg '#{mail}' is not string" unless mail.class == String or mail.nil?
+    return true if mail=~/^[^@\s]+@[^@\s]+\.\w+$/ or mail.nil?
+    false
+  end
+
+  def self.is_telegram?(telegram)
+    raise ArgumentError, "arg '#{telegram}' is not string" unless telegram.class == String or telegram.nil?
+    return true if telegram=~/^@[^@]+$/ or telegram.nil?
+    false
+  end
+
+  def self.is_git?(git)
+    raise ArgumentError, "arg '#{git}' is not string" unless git.class == String or git.nil?
+    return true if git=~/^github\.com\/[a-zA-Z0-9\-_]+$/ or git.nil?
     false
   end
 end
