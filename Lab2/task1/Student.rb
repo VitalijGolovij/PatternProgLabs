@@ -22,7 +22,7 @@ class Student
   end
 
   def have_contact?
-    !(self.phone.nil? or self.telegram.nil? or self.mail.nil?)
+    !(self.phone.nil? and self.telegram.nil? and self.mail.nil?)
   end
   def phone=(other)
     raise ArgumentError, "arg '#{other}' is not valid for phone" unless Student.is_phone?(other)
