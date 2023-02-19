@@ -13,6 +13,12 @@ class Student
     self.git = options[:git]
   end
 
+  def set_contacts(contacts)
+    self.phone = contacts[:phone] unless contacts[:phone].nil?
+    self.mail = contacts[:mail] unless contacts[:mail].nil?
+    self.telegram = contacts[:telegram] unless contacts[:telegram].nil?
+  end
+
   def validate
     have_git? and have_contact?
   end

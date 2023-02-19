@@ -14,8 +14,8 @@ puts student2.to_s
 puts "---------------------"
 puts student3.to_s
 
-student1.phone = '+71111111111'
-puts student1.phone
 
 student4 = Student.new('Борис', 'Лоров', 'Анатольевич')
 puts student4.validate
+student4.set_contacts(phone:'+70000000000')
+puts student4.to_s
