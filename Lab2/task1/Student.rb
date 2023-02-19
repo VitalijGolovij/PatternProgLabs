@@ -30,8 +30,8 @@ class Student
     puts "git: #{self.git}" unless self.git.nil?
   end
   def self.is_phone?(phone)
-    raise "arg '#{phone}' is not string" if phone.class != String
-    return true if phone=~/^(\+7|8)\s?(\(\d{3}\)|\d{3})[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}/
+    raise "arg '#{phone}' is not string" unless phone.class == String or phone.nil?
+    return true if phone=~/^(\+7|8)\s?(\(\d{3}\)|\d{3})[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}/ or phone.nil?
     false
   end
 end
