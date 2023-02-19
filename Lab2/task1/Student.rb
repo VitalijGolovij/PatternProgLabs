@@ -53,16 +53,17 @@ class Student
     raise ArgumentError, "arg '#{other}' is not valid for id (must be int)" unless Student.is_git?(other)
     @git = other
   end
-  def print
-    puts "Information about student"
-    puts "id: #{self.id}" unless self.id.nil?
-    puts "name: #{self.name}"
-    puts "surname: #{self.surname}"
-    puts "patronymic: #{self.patronymic}"
-    puts "phone: #{self.phone}" unless self.phone.nil?
-    puts "telegram: #{self.telegram}" unless self.telegram.nil?
-    puts "mail: #{self.mail}" unless self.mail.nil?
-    puts "git: #{self.git}" unless self.git.nil?
+  def to_s
+    res = "Information about student\n"
+    res += "id: #{self.id}\n" unless self.id.nil?
+    res += "name: #{self.name}\n"
+    res += "surname: #{self.surname}\n"
+    res += "patronymic: #{self.patronymic}\n"
+    res += "phone: #{self.phone}\n" unless self.phone.nil?
+    res += "telegram: #{self.telegram}\n" unless self.telegram.nil?
+    res += "mail: #{self.mail}\n" unless self.mail.nil?
+    res += "git: #{self.git}\n" unless self.git.nil?
+    res
   end
 
   def self.is_phone?(phone)
