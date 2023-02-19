@@ -1,6 +1,7 @@
 class Student
   attr_accessor :id, :surname, :name, :patronymic,
-                :telegram, :mail, :git, :phone
+                :telegram, :mail, :git
+  attr_reader :phone
 
   def initialize(name, surname, patronymic, options = {})
     self.name = name
