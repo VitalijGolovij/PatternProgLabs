@@ -13,3 +13,6 @@ puts "---------------------"
 student2.print
 puts "---------------------"
 student3.print
+
+student1.phone = '+71111111111'
+puts student1.phone
