@@ -8,11 +8,14 @@ student2 = Student.new('Василий','Леонов','Федеровчи', id:
                    mail:'ngiuaf@mail.ru',git:'github.com/hshgs')
 student3 = Student.new('Кирилл','Додонов','Иванович', id:3, telegram:'@kokhuba')
 
-student1.print
+puts student1.to_s
 puts "---------------------"
-student2.print
+puts student2.to_s
 puts "---------------------"
-student3.print
+puts student3.to_s
 
 student1.phone = '+71111111111'
 puts student1.phone
+
+student4 = Student.new('Борис', 'Лоров', 'Анатольевич')
+puts student4.validate

@@ -13,6 +13,17 @@ class Student
     self.git = options[:git]
   end
 
+  def validate
+    have_git? and have_contact?
+  end
+
+  def have_git?
+    !self.git.nil?
+  end
+
+  def have_contact?
+    !(self.phone.nil? or self.telegram.nil? or self.mail.nil?)
+  end
   def phone=(other)
     raise ArgumentError, "arg '#{other}' is not valid for phone" unless Student.is_phone?(other)
     @phone = other
@@ -34,8 +45,8 @@ class Student
   end
 
   def id=(other)
-    raise ArgumentError, "arg '#{other}' is not valid for id (must be int)" if other.class != Integer
-    raise ArgumentError, "arg '#{other}' is not valid for id (must be greater than zero)" if other < 0
+    raise ArgumentError, "arg '#{other}' is not valid for id (must be int)" unless other.class == Integer or other.nil?
+    raise ArgumentError, "arg '#{other}' is not valid for id (must be greater than zero)" if other.class == Integer and other < 0
     @id = other
   end
 
