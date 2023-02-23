@@ -2,15 +2,15 @@ class Student
   attr_reader :phone, :id, :surname, :name, :patronymic,
               :telegram, :mail, :git
 
-  def initialize(name, surname, patronymic, options = {})
+  def initialize(name, surname, patronymic, id:nil, phone:nil, telegram: nil, mail:nil, git:nil)
     self.name = name
     self.surname = surname
     self.patronymic = patronymic
-    self.id = options[:id]
-    self.phone = options[:phone]
-    self.telegram = options[:telegram]
-    self.mail = options[:mail]
-    self.git = options[:git]
+    self.id = id
+    self.phone = phone
+    self.telegram = telegram
+    self.mail = mail
+    self.git = git
   end
 
   def set_contacts(contacts)
