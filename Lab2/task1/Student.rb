@@ -2,7 +2,7 @@ class Student
   attr_reader :phone, :id, :surname, :name, :patronymic,
               :telegram, :mail, :git
 
-  def initialize(name, surname, patronymic, id:nil, phone:nil, telegram: nil, mail:nil, git:nil)
+  def initialize(name:, surname:, patronymic:, id:nil, phone:nil, telegram: nil, mail:nil, git:nil)
     self.name = name
     self.surname = surname
     self.patronymic = patronymic
@@ -13,23 +13,14 @@ class Student
     self.git = git
   end
 
+  #add or change contact details
   def set_contacts(contacts)
     self.phone = contacts[:phone] unless contacts[:phone].nil?
     self.mail = contacts[:mail] unless contacts[:mail].nil?
     self.telegram = contacts[:telegram] unless contacts[:telegram].nil?
   end
 
-  def validate
-    have_git? and have_contact?
-  end
-
-  def have_git?
-    !self.git.nil?
-  end
-
-  def have_contact?
-    !(self.phone.nil? and self.telegram.nil? and self.mail.nil?)
-  end
+  #setters
   def phone=(other)
     raise ArgumentError, "arg '#{other}' is not valid for phone" unless Student.is_phone?(other)
     @phone = other
@@ -70,6 +61,8 @@ class Student
     raise ArgumentError, "arg '#{other}' is not valid for id (must be int)" unless Student.is_git?(other)
     @git = other
   end
+
+  #get information about class fields
   def to_s
     res = "Information about student\n"
     res += "id: #{self.id}\n" unless self.id.nil?
@@ -81,6 +74,19 @@ class Student
     res += "mail: #{self.mail}\n" unless self.mail.nil?
     res += "git: #{self.git}\n" unless self.git.nil?
     res
+  end
+
+  #validation of data
+  def validate
+    have_git? and have_contact?
+  end
+
+  def have_git?
+    !self.git.nil?
+  end
+
+  def have_contact?
+    !(self.phone.nil? and self.telegram.nil? and self.mail.nil?)
   end
 
   def self.is_phone?(phone)
