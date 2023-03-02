@@ -77,7 +77,7 @@ class Student
   end
 
   #validation of data
-  def validate
+  def validate?
     have_git? and have_contact?
   end
 
