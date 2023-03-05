@@ -25,12 +25,12 @@ class Student
         phone: args['phone'], telegram: args['telegram'], mail: args['mail'], git: args['git'])
   end
 
-  def get_surname_and_initial
+  def get_shortname
     self.name + " " + self.surname[0].upcase + ". " + self.patronymic[0].upcase + "."
   end
 
   def get_git
-    "git: " + self.git unless self.git.nil?
+    self.git unless self.git.nil?
   end
 
   def get_contact
@@ -40,9 +40,9 @@ class Student
   end
 
   def get_info
-    info = get_surname_and_initial
-    info += ", " + get_git unless get_git.nil?
-    info += ", " + get_contact unless get_contact.nil?
+    info = "{\"#{:shortname.to_s}\": \"#{get_shortname}\"}"
+    info.insert(-2, ", \"git\":\"#{get_git}\"")  unless get_git.nil?
+    info.insert(-2,",\"contact\":\"#{get_contact}\" ") unless get_contact.nil?
     info
   end
 

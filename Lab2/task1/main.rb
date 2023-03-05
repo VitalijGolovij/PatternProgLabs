@@ -1,21 +1,19 @@
+require 'json'
 require File.expand_path(File.dirname(__FILE__) + '/Student.rb')
+require File.expand_path(File.dirname(__FILE__) + '/Student_short.rb')
 
-student1 = Student.new(name:'Егор',surname:'Крид',patronymic: 'Валерьевич', id:1,
-                   phone:'+79185671244', telegram:'@egorcheek',
-                   mail:'egorik@mail.ru',git:'github.com/egorIT')
-student2 = Student.new(name:'Василий',surname: 'Леонов',patronymic: 'Федеровчи', id:2,
-                   phone:'+7 918 878 54 09', telegram:'@dadaka',
-                   mail:'ngiuaf@mail.ru',git:'github.com/hshgs')
-student3 = Student.new(name: 'Кирилл',surname: 'Додонов',patronymic: 'Иванович', id:3, telegram:'@kokhuba')
-
-puts student1
-puts "---------------------"
-puts student2
-puts "---------------------"
-puts student3
-
-
-student4 = Student.new(name: 'Борис', surname: 'Лоров', patronymic: 'Анатольевич')
-puts student4.validate
+student4 = Student.new(id:1, name:'Егор',surname:'Крид',patronymic: 'Валерьевич', git:'github.com/aaa', mail:'aa@maiil.com')
 student4.set_contacts(phone:'+70000000000')
-puts student4
+
+
+short1 = Student_short.new(3,Student_short.to_json_str("Буквоедов А. Н.","github.com/sss"))
+puts short1.id
+puts short1.shortname
+puts short1.contact
+puts short1.git
+
+short2 = Student_short.from_student(student4)
+puts short2.id
+puts short2.shortname
+puts short2.contact
+puts short2.git
