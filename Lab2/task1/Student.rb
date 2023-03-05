@@ -1,3 +1,4 @@
+require 'json'
 class Student
   attr_reader :phone, :id, :surname, :name, :patronymic,
               :telegram, :mail, :git
@@ -11,6 +12,17 @@ class Student
     self.telegram = telegram
     self.mail = mail
     self.git = git
+  end
+
+  #init from json string
+  def self.from_json_str(str)
+    args = JSON.parse(str)
+
+    raise ArgumentError, "arg '#{str} most have keys 'name', 'surname' and 'patronymic'" unless
+      (args.has_key?('name') and args.has_key?('surname') and args.has_key?('patronymic'))
+
+    new(name: args['name'], surname: args['surname'], patronymic: args['patronymic'], id: args['id'],
+        phone: args['phone'], telegram: args['telegram'], mail: args['mail'], git: args['git'])
   end
 
   #add or change contact details
