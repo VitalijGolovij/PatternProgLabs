@@ -25,6 +25,27 @@ class Student
         phone: args['phone'], telegram: args['telegram'], mail: args['mail'], git: args['git'])
   end
 
+  def get_surname_and_initial
+    self.name + " " + self.surname[0].upcase + ". " + self.patronymic[0].upcase + "."
+  end
+
+  def get_git
+    "git: " + self.git unless self.git.nil?
+  end
+
+  def get_contact
+    return "phone number: " + self.phone unless self.phone.nil?
+    return "mail: " + self.mail unless self.mail.nil?
+    "telegram: " + self.telegram unless self.telegram.nil?
+  end
+
+  def get_info
+    info = get_surname_and_initial
+    info += ", " + get_git unless get_git.nil?
+    info += ", " + get_contact unless get_contact.nil?
+    info
+  end
+
   #add or change contact details
   def set_contacts(contacts)
     self.phone = contacts[:phone] unless contacts[:phone].nil?
