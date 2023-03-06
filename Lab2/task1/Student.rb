@@ -28,7 +28,7 @@ class Student
   def get_shortname
     self.name + " " + self.surname[0].upcase + ". " + self.patronymic[0].upcase + "."
   end
-
+# а зачем два геттера для гита? у вас уже один есть
   def get_git
     self.git unless self.git.nil?
   end
