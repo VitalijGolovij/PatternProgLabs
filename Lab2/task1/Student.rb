@@ -29,10 +29,6 @@ class Student
     self.name + " " + self.surname[0].upcase + ". " + self.patronymic[0].upcase + "."
   end
 
-  def get_git
-    self.git unless self.git.nil?
-  end
-
   def get_contact
     return "phone number: " + self.phone unless self.phone.nil?
     return "mail: " + self.mail unless self.mail.nil?
@@ -41,7 +37,7 @@ class Student
 
   def get_info
     info = "{\"#{:shortname.to_s}\": \"#{get_shortname}\"}"
-    info.insert(-2, ", \"git\":\"#{get_git}\"")  unless get_git.nil?
+    info.insert(-2, ", \"git\":\"#{self.git}\"")  unless self.git.nil?
     info.insert(-2,",\"contact\":\"#{get_contact}\" ") unless get_contact.nil?
     info
   end

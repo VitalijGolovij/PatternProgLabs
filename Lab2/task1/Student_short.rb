@@ -42,7 +42,7 @@ class Student_short
 
   #initialize from Student class object
   def self.from_student(student)
-    new(student.id, to_json_str(student.get_shortname, student.get_git, student.get_contact))
+    new(student.id, to_json_str(student.get_shortname, student.git, student.get_contact))
   end
 
   #get json string
