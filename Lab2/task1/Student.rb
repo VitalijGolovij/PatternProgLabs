@@ -1,17 +1,21 @@
 require 'json'
-class Student
-  attr_reader :phone, :id, :surname, :name, :patronymic,
-              :telegram, :mail, :git
+require_relative 'Student_short'
 
-  def initialize(name:, surname:, patronymic:, id:nil, phone:nil, telegram: nil, mail:nil, git:nil)
+class Student < Student_short
+  #запривачиваем ненужный конструктор
+  private_class_method :from_student
+
+  #добавили фамилию и отчество
+  attr_reader :surname, :patronymic
+
+  def initialize(name:, surname:, patronymic:, id:nil, git:nil, phone:nil, mail:nil, telegram: nil)
+    self.id = id
     self.name = name
     self.surname = surname
     self.patronymic = patronymic
-    self.id = id
-    self.phone = phone
-    self.telegram = telegram
-    self.mail = mail
     self.git = git
+    @contact = Hash.new
+    set_contact(phone: phone, mail: mail, telegram: telegram)
   end
 
   #init from json string
@@ -25,34 +29,40 @@ class Student
         phone: args['phone'], telegram: args['telegram'], mail: args['mail'], git: args['git'])
   end
 
-  def get_shortname
+  def shortname
     self.name + " " + self.surname[0].upcase + ". " + self.patronymic[0].upcase + "."
   end
 
-  def get_contact
-    return "phone number: " + self.phone unless self.phone.nil?
-    return "mail: " + self.mail unless self.mail.nil?
-    "telegram: " + self.telegram unless self.telegram.nil?
+  def contact
+    return "{\"phone\": \"#{self.phone}\"}" unless self.phone.nil?
+    return "{\"mail\": \"#{self.mail}\"}" unless self.mail.nil?
+    "{\"telegram\": \"#{self.telegram}\"}" unless self.telegram.nil?
   end
 
   def get_info
-    info = "{\"#{:shortname.to_s}\": \"#{get_shortname}\"}"
+    info = "{\"#{:name.to_s}\": \"#{shortname}\"}"
     info.insert(-2, ", \"git\":\"#{self.git}\"")  unless self.git.nil?
-    info.insert(-2,",\"contact\":\"#{get_contact}\" ") unless get_contact.nil?
+    info.insert(-2,",\"contact\":#{self.contact}") unless self.contact.nil?
     info
   end
 
-  #add or change contact details
-  def set_contacts(contacts)
-    self.phone = contacts[:phone] unless contacts[:phone].nil?
-    self.mail = contacts[:mail] unless contacts[:mail].nil?
-    self.telegram = contacts[:telegram] unless contacts[:telegram].nil?
+  def phone
+    @contact['phone']
+  end
+
+  def mail
+    @contact['mail']
+  end
+
+  def telegram
+    @contact['telegram']
   end
 
   #setters
-  def phone=(other)
-    raise ArgumentError, "arg '#{other}' is not valid for phone" unless Student.is_phone?(other)
-    @phone = other
+  def set_contact(phone:nil, mail:nil, telegram:nil)
+    self.phone = phone
+    self.mail = mail
+    self.telegram = telegram
   end
 
   def name=(other)
@@ -70,39 +80,30 @@ class Student
     @patronymic = other
   end
 
+  def phone=(other)
+    raise ArgumentError, "arg '#{other}' is not valid for phone" unless Student.is_phone?(other)
+    @contact['phone'] = other
+  end
+
+  def mail=(other)
+    raise ArgumentError, "arg '#{other}' is not valid for mail" unless Student.is_mail?(other)
+    @contact['mail'] = other
+  end
+
+  def telegram=(other)
+    raise ArgumentError, "arg '#{other}' is not valid for telegram" unless Student.is_telegram?(other)
+    @contact['telegram'] = other
+  end
+
   def id=(other)
     raise ArgumentError, "arg '#{other}' is not valid for id (must be int)" unless other.class == Integer or other.nil?
     raise ArgumentError, "arg '#{other}' is not valid for id (must be greater than zero)" if other.class == Integer and other < 0
     @id = other
   end
 
-  def mail=(other)
-    raise ArgumentError, "arg '#{other}' is not valid for mail (must be string)" unless Student.is_mail?(other)
-    @mail = other
-  end
-
-  def telegram=(other)
-    raise ArgumentError, "arg '#{other}' is not valid for telegram (must be string)" unless Student.is_telegram?(other)
-    @telegram = other
-  end
-
   def git=(other)
-    raise ArgumentError, "arg '#{other}' is not valid for id (must be int)" unless Student.is_git?(other)
+    raise ArgumentError, "arg '#{other}' is not valid for git" unless Student.is_git?(other)
     @git = other
-  end
-
-  #get information about class fields
-  def to_s
-    res = "Information about student\n"
-    res += "id: #{self.id}\n" unless self.id.nil?
-    res += "name: #{self.name}\n"
-    res += "surname: #{self.surname}\n"
-    res += "patronymic: #{self.patronymic}\n"
-    res += "phone: #{self.phone}\n" unless self.phone.nil?
-    res += "telegram: #{self.telegram}\n" unless self.telegram.nil?
-    res += "mail: #{self.mail}\n" unless self.mail.nil?
-    res += "git: #{self.git}\n" unless self.git.nil?
-    res
   end
 
   #validation of data
@@ -115,18 +116,18 @@ class Student
   end
 
   def have_contact?
-    !(self.phone.nil? and self.telegram.nil? and self.mail.nil?)
-  end
-
-  def self.is_phone?(phone)
-    raise ArgumentError, "arg '#{phone}' is not string" unless phone.class == String or phone.nil?
-    return true if phone=~/^(\+7|8)\s?(\(\d{3}\)|\d{3})[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}/ or phone.nil?
-    false
+    !(self.contact.size == 0)
   end
 
   def self.is_name?(name)
     raise ArgumentError, "arg '#{name}' is not string" unless name.class == String
     return true if name=~/^[А-Яа-я]+$/
+    false
+  end
+
+  def self.is_phone?(phone)
+    raise ArgumentError, "arg '#{phone}' is not string" unless phone.class == String or phone.nil?
+    return true if phone=~/^(\+7|8)\s?(\(\d{3}\)|\d{3})[\s\-]?\d{3}[\s\-]?\d{2}[\s\-]?\d{2}/ or phone.nil?
     false
   end
 
@@ -147,5 +148,18 @@ class Student
     return true if git=~/^github\.com\/[a-zA-Z0-9\-_]+$/ or git.nil?
     false
   end
-end
 
+  #get information about class fields
+  def to_s
+    res = "Information about student\n"
+    res += "id: #{self.id}\n" unless self.id.nil?
+    res += "name: #{self.name}\n"
+    res += "surname: #{self.surname}\n"
+    res += "patronymic: #{self.patronymic}\n"
+    res += "phone: #{self.phone}\n" unless self.phone.nil?
+    res += "telegram: #{self.telegram}\n" unless self.telegram.nil?
+    res += "mail: #{self.mail}\n" unless self.mail.nil?
+    res += "git: #{self.git}\n" unless self.git.nil?
+    res
+  end
+end
