@@ -29,6 +29,25 @@ class Student < Student_short
         phone: args['phone'], telegram: args['telegram'], mail: args['mail'], git: args['git'])
   end
 
+  def self.read_from_txt(file_path)
+    student_list = Array.new
+    if File.exist?(file_path)
+      file = File.new(file_path, "r:UTF-8")
+      lines = file.read.to_s.strip
+      cur_str = ""
+      lines.each_char do |char|
+        cur_str += char
+        if char == '}'
+          student_list.append(Student.from_json_str(cur_str))
+          cur_str = ""
+        end
+      end
+    else
+      raise ArgumentError, "file in path '#{file_path}' not found"
+    end
+    student_list
+  end
+
   def shortname
     self.name + " " + self.surname[0].upcase + ". " + self.patronymic[0].upcase + "."
   end
