@@ -34,6 +34,7 @@ Class Student extends Student_short{
      +have_git?(): Boolean
      +validate(): Boolean
      +set_contacts(Hash)
+     +get_info(): String
      +to_s(): String
      .. Геттеры ..
      +phone(): String
@@ -41,6 +42,7 @@ Class Student extends Student_short{
      +mail(): String
      +surname(): String
      +patronymic(): String
+     +contact(): String
      .. Сеттеры ..
      +id=(Integer)
      +git=(String)
