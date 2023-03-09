@@ -30,7 +30,7 @@ class Student < Student_short
   end
 
   def self.read_from_txt(file_path)
-    student_list = Array.new
+    student_array = Array.new
     if File.exist?(file_path)
       file = File.new(file_path, "r:UTF-8")
       lines = file.read.to_s.strip
@@ -38,14 +38,14 @@ class Student < Student_short
       lines.each_char do |char|
         cur_str += char
         if char == '}'
-          student_list.append(Student.from_json_str(cur_str))
+          student_array.append(Student.from_json_str(cur_str))
           cur_str = ""
         end
       end
     else
       raise ArgumentError, "file in path '#{file_path}' not found"
     end
-    student_list
+    student_array
   end
 
   def shortname
@@ -170,15 +170,12 @@ class Student < Student_short
 
   #get information about class fields
   def to_s
-    res = "Information about student\n"
-    res += "id: #{self.id}\n" unless self.id.nil?
-    res += "name: #{self.name}\n"
-    res += "surname: #{self.surname}\n"
-    res += "patronymic: #{self.patronymic}\n"
-    res += "phone: #{self.phone}\n" unless self.phone.nil?
-    res += "telegram: #{self.telegram}\n" unless self.telegram.nil?
-    res += "mail: #{self.mail}\n" unless self.mail.nil?
-    res += "git: #{self.git}\n" unless self.git.nil?
+    res = "{\"name\":\"#{self.name}\", \"surname\":\"#{self.surname}\",\"patronymic\":\"#{self.patronymic}\"}"
+    res.insert(-2,",\"id\":\"#{self.id}\"") unless self.id.nil?
+    res.insert(-2,",\"git\":\"#{self.git}\"") unless self.git.nil?
+    res.insert(-2,",\"phone\":\"#{self.phone}\"") unless self.phone.nil?
+    res.insert(-2,",\"mail\":\"#{self.mail}\"") unless self.mail.nil?
+    res.insert(-2,",\"telegram\":\"#{self.telegram}\"") unless self.telegram.nil?
     res
   end
 end
