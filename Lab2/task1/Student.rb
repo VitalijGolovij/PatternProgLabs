@@ -42,10 +42,19 @@ class Student < Student_short
           cur_str = ""
         end
       end
+      file.close
     else
       raise ArgumentError, "file in path '#{file_path}' not found"
     end
     student_array
+  end
+
+  def self.write_to_txt(student_array, file_path)
+    file = File.new(file_path, 'w')
+    student_array.each do |student|
+      file.write("#{student}\n")
+    end
+    file.close
   end
 
   def shortname
