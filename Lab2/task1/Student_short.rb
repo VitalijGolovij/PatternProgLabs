@@ -18,5 +18,18 @@ class Student_short
   def self.from_student(student)
     new(student.id, student.get_info)
   end
+
+  def validate?
+    have_git? and have_contact?
+  end
+
+  def have_git?
+    !self.git.nil?
+  end
+
+  def have_contact?
+    !self.contact.nil?
+  end
+
 end
 

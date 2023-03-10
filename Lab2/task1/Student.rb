@@ -135,18 +135,6 @@ class Student < Student_short
   end
 
   #validation of data
-  def validate?
-    have_git? and have_contact?
-  end
-
-  def have_git?
-    !self.git.nil?
-  end
-
-  def have_contact?
-    !(self.contact.size == 0)
-  end
-
   def self.is_name?(name)
     raise ArgumentError, "arg '#{name}' is not string" unless name.class == String
     return true if name=~/^[А-Яа-я]+$/
