@@ -9,6 +9,9 @@ Class Student_short
  --
       +{static}initialize(Integer, String)
       +{static}from_student(Student)
+      +have_contact?(): Boolean
+      +have_git?(): Boolean
+      +validate?(): Boolean
       .. Геттеры ..
       +id(): Integer
       +git(): String
@@ -21,20 +24,21 @@ Class Student_short
 Class Student extends Student_short{
      -surname: String
      -patronymic: String
-     -contact: Hash
+     -phone: String
+     -mail: String
+     -telegram: String
 --
      +{static}is_name?(String): Boolean
      +{static}is_phone?(String): Boolean
      +{static}is_telegram?(String): Boolean
      +{static}is_mail?(String): Boolean
-     +{static}initialize(String, String, String, Hash)
+     +{static}initialize(Hash)
      +{static}from_json_str(String)
+     +{static}read_from_txt(Strind): Array
+     +{static}write_to_txt(Array, String)
      -{static}from_student(Student)
-     +have_contact?(): Boolean
-     +have_git?(): Boolean
-     +validate(): Boolean
-     +set_contacts(Hash)
-     +contact(): String
+     +set_contacts()
+     -get_any_contact(): String
      +get_info(): String
      +to_s(): String
      .. Геттеры ..

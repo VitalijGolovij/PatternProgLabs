@@ -6,7 +6,7 @@ class Student < Student_short
   private_class_method :from_student
 
   #добавили фамилию и отчество
-  attr_reader :surname, :patronymic
+  attr_reader :surname, :patronymic, :phone, :mail, :telegram
 
   def initialize(name:, surname:, patronymic:, id:nil, git:nil, phone:nil, mail:nil, telegram: nil)
     self.id = id
@@ -14,7 +14,6 @@ class Student < Student_short
     self.surname = surname
     self.patronymic = patronymic
     self.git = git
-    @contact = Hash.new
     set_contact(phone: phone, mail: mail, telegram: telegram)
   end
 
@@ -61,29 +60,17 @@ class Student < Student_short
     self.name + " " + self.surname[0].upcase + ". " + self.patronymic[0].upcase + "."
   end
 
-  def contact
-    return "{\"phone\": \"#{self.phone}\"}" unless self.phone.nil?
-    return "{\"mail\": \"#{self.mail}\"}" unless self.mail.nil?
-    "{\"telegram\": \"#{self.telegram}\"}" unless self.telegram.nil?
+  private def get_any_contact
+    return self.phone unless self.phone.nil?
+    return self.mail unless self.mail.nil?
+    self.telegram unless self.telegram.nil?
   end
 
   def get_info
     info = "{\"#{:name.to_s}\": \"#{shortname}\"}"
     info.insert(-2, ", \"git\":\"#{self.git}\"")  unless self.git.nil?
-    info.insert(-2,",\"contact\":#{self.contact}") unless self.contact.nil?
+    info.insert(-2,",\"contact\":\"#{self.contact}\"") unless self.contact.nil?
     info
-  end
-
-  def phone
-    @contact['phone']
-  end
-
-  def mail
-    @contact['mail']
-  end
-
-  def telegram
-    @contact['telegram']
   end
 
   #setters
@@ -91,6 +78,7 @@ class Student < Student_short
     self.phone = phone
     self.mail = mail
     self.telegram = telegram
+    @contact = get_any_contact
   end
 
   def name=(other)
@@ -110,17 +98,17 @@ class Student < Student_short
 
   def phone=(other)
     raise ArgumentError, "arg '#{other}' is not valid for phone" unless Student.is_phone?(other)
-    @contact['phone'] = other
+    @phone = other
   end
 
   def mail=(other)
     raise ArgumentError, "arg '#{other}' is not valid for mail" unless Student.is_mail?(other)
-    @contact['mail'] = other
+    @mail = other
   end
 
   def telegram=(other)
     raise ArgumentError, "arg '#{other}' is not valid for telegram" unless Student.is_telegram?(other)
-    @contact['telegram'] = other
+    @telegram = other
   end
 
   def id=(other)

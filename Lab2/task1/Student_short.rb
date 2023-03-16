@@ -12,7 +12,7 @@ class Student_short
 
     @name = args['name']
     @git = args['git']
-    @contact = args["contact"][args["contact"].keys.at(0)] unless args["contact"].nil?
+    @contact = args["contact"]
   end
 
   def self.from_student(student)
