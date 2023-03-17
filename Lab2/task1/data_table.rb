@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'json'
+require_relative 'data_list'
 
 class Data_table
   def initialize(objects_array)
