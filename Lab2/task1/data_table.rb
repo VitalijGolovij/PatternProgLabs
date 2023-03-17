@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 require 'json'
-require_relative 'Student'
 
 class Data_table
-  def initialize(student_list)
+  def initialize(objects_array)
     @table = []
-    student_list.each do |student|
-      @table << JSON.parse(student.to_s).values
+    objects_array.each do |object|
+      row = []
+      object.instance_variables.each{|arg| row << object.instance_variable_get(arg)}
+      @table << row
     end
   end
 end
