@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
 class Data_list
-  def initialize(object)
-    @list = []
+  def initialize(objects_list)
+    @list = objects_list
     @selected = []
-    object.instance_variables.each do |attr|
-      @list << [attr, object.instance_variable_get(attr)]
-    end
   end
 
   def select(number)
@@ -19,5 +16,13 @@ class Data_list
 
   def get_selected
     @selected
+  end
+
+  def get_names
+
+  end
+
+  def get_data
+
   end
 end
