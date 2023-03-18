@@ -57,4 +57,34 @@ Class Student extends Student_short{
      +surname=(String)
      +patronymic=(String)
  }
+
+Class Data_list
+ {
+      -list: Array
+      -selected: Array
+ --
+      +{static}initialize(Array)
+      +select(Integer)
+      +get_selected(): Array
+      +get_names()
+      +get_data()
+  }
+
+Class Data_list_student_short extends Data_list
+ {
+ --
+      +get_names(): Array
+      +get_data(): Data_table
+  }
+
+Class Data_table
+ {
+      -table: Array
+ --
+      +{static}initialize(Array)
+      +get_elem(Integer, Integer): Object
+      +rows_count(): Integer
+      +columns_count(): Integer
+  }
+Data_list_student_short --> Data_table
 @enduml
