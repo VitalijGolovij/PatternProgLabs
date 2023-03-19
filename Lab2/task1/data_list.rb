@@ -2,7 +2,7 @@
 
 class Data_list
   def initialize(objects_list)
-    @list = objects_list
+    self.list = objects_list
     @selected = []
   end
 
@@ -16,6 +16,11 @@ class Data_list
 
   def get_selected
     @selected
+  end
+
+  def list=(other)
+    raise ArgumentError, "arg 'objects_list' must be Array" if other.class != Array
+    @list = other
   end
 
   #основной метод, возвращающий Data_table
