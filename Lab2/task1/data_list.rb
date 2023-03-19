@@ -18,11 +18,28 @@ class Data_list
     @selected
   end
 
-  def get_names
-
+  #основной метод, возвращающий Data_table
+  def get_data
+    Data_table.new(fill_table(get_names, @list))
   end
 
-  def get_data
+  protected
+  #метод шаблона 1 - вернуть имена аттрибутов
+  def get_names
+    @list[0].instance_variables
+  end
 
+  #метод шаблона 2 - заполнить строку для таблицы
+  def fill_row(attr_names, object)
+    row = []
+    attr_names.each{ |attr_name| row << object.instance_variable_get(attr_name) }
+    row
+  end
+
+  #метод шаблона 3 - заполнить таблицу
+  def fill_table(attr_names, objects_list)
+    table = []
+    objects_list.each{ |object| table << fill_row(attr_names, object) }
+    table
   end
 end
