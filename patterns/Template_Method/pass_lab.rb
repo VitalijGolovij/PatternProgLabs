@@ -8,6 +8,7 @@ class Pass_lab
     get_grade
   end
 
+  protected
   def come_to_class
     puts "Зашёл в аудиторию"
   end

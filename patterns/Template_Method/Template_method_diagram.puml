@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+Class Pass_lab
+ {
+ --
+      +come_to_class()
+      +come_to_teacher()
+      +show_homework()
+      +answer_questions()
+      +get_grade()
+  }
+
+Class Pass_patterns extends Pass_lab
+{
+--
++show_homework()
+}
+
+Class Pass_math extends Pass_lab
+{
+--
++show_homework()
++get_grade()
+}
+@enduml
