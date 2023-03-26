@@ -31,5 +31,12 @@ class Student_short
     !self.contact.nil?
   end
 
+  def to_s
+    res = "{\"name\":\"#{self.name}\"}"
+    res.insert(-2,",\"id\":\"#{self.id}\"") unless self.id.nil?
+    res.insert(-2,",\"git\":\"#{self.git}\"") unless self.git.nil?
+    res.insert(-2,",\"phone\":\"#{self.contact}\"") unless self.contact.nil?
+    res
+  end
 end
 
