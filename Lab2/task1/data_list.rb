@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Data_list
+  attr_reader :list
   def initialize(objects_list)
     self.list = objects_list
     @selected = []
