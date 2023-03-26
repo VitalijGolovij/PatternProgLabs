@@ -15,7 +15,9 @@ class Data_list
   end
 
   def get_selected
-    @selected
+    selected_student_id = []
+    @selected.each{ |selected_number| selected_student_id << @list[selected_number].id }
+    selected_student_id
   end
 
   def list=(other)
@@ -25,26 +27,24 @@ class Data_list
 
   #основной метод, возвращающий Data_table
   def get_data
-    Data_table.new(fill_table(get_names, @list))
+    Data_table.new(fill_table(@list))
   end
 
   protected
-  #метод шаблона 1 - вернуть имена аттрибутов
+  #метод шаблона 1 - вернуть имена столбцов таблицы
   def get_names
-    @list[0].instance_variables
+    []
   end
 
   #метод шаблона 2 - заполнить строку для таблицы
-  def fill_row(attr_names, object)
-    row = []
-    attr_names.each{ |attr_name| row << object.instance_variable_get(attr_name) }
-    row
+  def fill_row(object)
+    []
   end
 
   #метод шаблона 3 - заполнить таблицу
-  def fill_table(attr_names, objects_list)
+  def fill_table(objects_list)
     table = []
-    objects_list.each{ |object| table << fill_row(attr_names, object) }
+    objects_list.each{ |object| table << fill_row(object) }
     table
   end
 end

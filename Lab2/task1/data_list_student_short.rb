@@ -4,16 +4,26 @@ require_relative 'data_table'
 
 class Data_list_student_short < Data_list
 
+
   #переопределили 1ый метод шаблона
-  #избавляемся от аттрибута id
+  #заполнили названия столбцов таблицы
   protected def get_names
-    super - [:@id]
+    %w[
+      number
+      name
+      contact
+      git
+    ]
   end
 
   #переопреелили 2ой метод шаблона
-  #в начало строки записываем порядковый номер
-  protected def fill_row(attr_names, object)
-    super.insert(0, @list.index(object))
+  protected def fill_row(object)
+    [
+      @list.index(object),
+      object.name,
+      object.contact,
+      object.git
+    ]
   end
 end
 
