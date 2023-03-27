@@ -162,4 +162,17 @@ class Student < Student_short
     res.insert(-2,",\"telegram\":\"#{self.telegram}\"") unless self.telegram.nil?
     res
   end
+
+  def to_hash
+    {
+      "id": self.id,
+      "name": self.name,
+      "surname": self.surname,
+      "patronymic": self.patronymic,
+      "git": self.git,
+      "phone": self.phone,
+      "mail": self.mail,
+      "telegram": self.telegram
+    }
+  end
 end
