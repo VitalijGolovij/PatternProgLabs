@@ -8,13 +8,13 @@ class Student < Student_short
   #добавили фамилию и отчество
   attr_reader :surname, :patronymic, :phone, :mail, :telegram
 
-  def initialize(name:, surname:, patronymic:, id:nil, git:nil, phone:nil, mail:nil, telegram: nil)
-    self.id = id
-    self.name = name
-    self.surname = surname
-    self.patronymic = patronymic
-    self.git = git
-    set_contact(phone: phone, mail: mail, telegram: telegram)
+  def initialize(options = {})
+    self.id = options['id']
+    self.name = options['name']
+    self.surname = options['surname']
+    self.patronymic = options['patronymic']
+    self.git = options['git']
+    set_contact(phone: options['phone'], mail: options['mail'], telegram: options['telegram'])
   end
 
   #init from json string
@@ -24,8 +24,7 @@ class Student < Student_short
     raise ArgumentError, "arg '#{str} most have keys 'name', 'surname' and 'patronymic'" unless
       (args.has_key?('name') and args.has_key?('surname') and args.has_key?('patronymic'))
 
-    new(name: args['name'], surname: args['surname'], patronymic: args['patronymic'], id: args['id'],
-        phone: args['phone'], telegram: args['telegram'], mail: args['mail'], git: args['git'])
+    new(args)
   end
 
   def self.read_from_txt(file_path)
