@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 require_relative 'data_list'
+require_relative 'file_reader_for_student_list'
+require_relative 'file_writer_for_student_list'
 
 class Student_list < Data_list
   attr_reader :student_list
@@ -8,6 +10,8 @@ class Student_list < Data_list
 
   def initialize
     self.list=[]
+    @file_reader = File_reader_for_student_list.new
+    @file_writer = File_writer_for_student_list.new
     @id_counter = 1
   end
 

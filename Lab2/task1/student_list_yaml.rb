@@ -6,12 +6,10 @@ class Student_list_YAML < Student_list
 
   def initialize(file_path)
     super()
-    YAML.load(File.read(file_path)).each{|hash_for_student| put_student(Student.new(hash_for_student))}
+    @file_reader.from_yaml(file_path, self)
   end
 
   def write_to_yaml(file_path)
-    student_hash_list = []
-    self.list.each{ |student| student_hash_list.append(student.to_hash) }
-    File.write(file_path, YAML.dump(student_hash_list))
+    @file_writer.to_yaml(file_path, self)
   end
 end

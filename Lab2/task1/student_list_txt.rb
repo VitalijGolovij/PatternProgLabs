@@ -6,10 +6,10 @@ class Student_list_txt < Student_list
 
   def initialize(txt_file_path)
     super()
-    Student.read_from_txt(txt_file_path).each { |student| put_student(student) }
+    @file_reader.from_txt(txt_file_path, self)
   end
 
   def write_to_txt(file_path)
-    Student.write_to_txt(self.list, file_path)
+    @file_writer.to_txt(file_path, self)
   end
 end
