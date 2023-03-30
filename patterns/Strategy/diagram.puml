@@ -1,0 +1,34 @@
+@startuml
+class Operations
+{
+--
++addition(Object)
++subtraction(Object)
++multiplication(Object)
++division(Object)
+}
+class X_and_Y
+{
++x:Integer
++y:Integer
++operation: Operations
+--
++calc()
+}
+class X1_and_Y1 extends X_and_Y
+{
+--
++calc()
+}
+class X2_and_Y2 extends X_and_Y
+{
+--
++calc()
+}
+class X3_and_Y3 extends X_and_Y
+{
+--
++calc()
+}
+Operations -> X_and_Y
+@enduml
