@@ -1,18 +1,29 @@
 # frozen_string_literal: true
 require_relative 'data_list'
-require_relative 'file_reader_for_student_list'
-require_relative 'file_writer_for_student_list'
+require_relative 'student_list_file_worker'
 
 class Student_list < Data_list
   attr_reader :student_list
 
-  private_class_method :new
 
-  def initialize
+  def initialize(student_list_file_worker)
     self.list=[]
-    @file_reader = File_reader_for_student_list.new
-    @file_writer = File_writer_for_student_list.new
+    set_file_worker(student_list_file_worker)
     @id_counter = 1
+  end
+
+  def set_file_worker(student_list_file_worker)
+    raise ArgumentError, "arg must be  an inheritor of the Student_list_file_worker class" unless student_list_file_worker.kind_of?(Student_list_file_worker)
+    @file_worker = student_list_file_worker
+  end
+
+  def read_from_file(file_path)
+    self.list = @file_worker.read_from_file(file_path)
+  end
+
+  def write_to_file(file_path)
+    hash_list = self.list.map{|student| student.to_hash}
+    @file_worker.write_to_file(file_path, hash_list)
   end
 
   def get_student_by_id(id)
