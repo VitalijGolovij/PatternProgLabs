@@ -34,8 +34,6 @@ Class Student extends Student_short{
      +{static}is_mail?(String): Boolean
      +{static}initialize(Hash)
      +{static}from_json_str(String)
-     +{static}read_from_txt(Strind): Array
-     +{static}write_to_txt(Array, String)
      -{static}from_student(Student)
      +set_contacts()
      -get_any_contact(): String
@@ -66,15 +64,19 @@ Class Data_list
       +{static}initialize(Array)
       +select(Integer)
       +get_selected(): Array
-      +get_names()
-      +get_data()
+      +get_data(): Data_table
+      -get_names(): Array
+      -fill_row(Array, Array): Array
+      -fill_table(Array, Array): Array
+..Сеттеры..
+      +list=(Array)
   }
 
 Class Data_list_student_short extends Data_list
  {
  --
-      +get_names(): Array
-      +get_data(): Data_table
+      -get_names(): Array
+      -fill_row(Array, Array) :Array
   }
 
 Class Data_table
@@ -86,5 +88,53 @@ Class Data_table
       +rows_count(): Integer
       +columns_count(): Integer
   }
+Class Student_list extends Data_list
+{
++file_worker: Student_list_file_worker
++id_counter
+--
+      +initialize()
++read_from_file(String): Array
++write_to_file(String)
++write_to_file(String)
++set_file_worker(Student_list_file_worker)
+      +get_student_by_id(Integer): Student
+      +get_k_n_student_short_list(Integer, Integer, Data_list): Data_list_student_short
+      +sort_by_shortname()
+      +put_student(Student, Integer)
+      +replace_by_id(Integer)
+      +drop_by_id(Integer)
+      +get_student_short_count(): Integer
+}
+
+Class Student_list_file_worker
+{
+--
++read_from_file
++write_to_file
+}
+
+Class Student_list_txt extends Student_list_file_worker
+{
+--
++read_from_file(String): Array
++write_to_file(String, Hash)
+}
+
+Class Student_list_JSON extends Student_list_file_worker
+{
+--
++read_from_file(String): Array
++write_to_file(String, Hash)
+}
+
+Class Student_list_YAML extends Student_list_file_worker
+{
+--
++read_from_file(String): Array
++write_to_file(String, Hash)
+}
+Student_list_file_worker --* Student_list
 Data_list_student_short --> Data_table
+Student_list *-- Student
 @enduml

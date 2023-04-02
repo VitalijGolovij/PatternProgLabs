@@ -7,6 +7,8 @@ class Data_table
   end
 
   def get_elem(index_row, index_column)
+    raise ArgumentError, "row index out of range" if index_row >= rows_count
+    raise ArgumentError, "column index out of range" if index_column >= rows_count
     @table[index_row][index_column]
   end
 

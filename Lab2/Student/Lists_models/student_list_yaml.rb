@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require 'yaml'
+require_relative '../Student_models/Student'
 
 class Student_list_YAML < Student_list_file_worker
   public_class_method :new

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 require_relative 'student_list_file_worker'
-require_relative 'Student'
+require_relative '../Student_models/Student'
 
 class Student_list_JSON < Student_list_file_worker
   public_class_method :new
