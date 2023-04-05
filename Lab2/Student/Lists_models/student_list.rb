@@ -2,12 +2,11 @@
 require_relative 'data_list'
 require_relative 'student_list_file_worker'
 
-class Student_list < Data_list
-  attr_reader :student_list
-
+class Student_list
+  attr_reader :list
 
   def initialize(student_list_file_worker)
-    self.list=[]
+    @list=[]
     set_file_worker(student_list_file_worker)
     @id_counter = 1
   end
@@ -63,5 +62,9 @@ class Student_list < Data_list
 
   def get_student_short_count
     self.list.size
+  end
+
+  protected def list=(other)
+    @list=other
   end
 end
