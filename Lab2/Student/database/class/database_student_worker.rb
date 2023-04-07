@@ -7,37 +7,46 @@ class Database_student_worker
   end
 
   #вернуть результат запроса в виде Array
-  protected def query_to_student_list(sql_query)
-    student_list = []
+  protected def query_to_list(sql_query)
+    _list = []
     @db_client.query(sql_query).each do |row|
-      student_list << Student.new(row)
+      _list << row
     end
-    student_list
+    _list
   end
 
-  def select_all
-    query_to_student_list("SELECT * FROM students")
+  protected def args_to_str(select_args)
+    if select_args
+      raise ArgumentError, "arg 'select_args' must be Array" unless select_args.class == Array
+      args = select_args.join(',')
+    else
+      args = '*'
+    end
   end
 
-  def select_by_id(id)
-    query_to_student_list("SELECT * FROM students WHERE id=#{id}")[0]
+  def select( table_name, select_args = nil)
+    query_to_list("SELECT #{args_to_str(select_args)} FROM #{table_name}")
   end
 
-  def insert_student(args)
-    @db_client.query("INSERT INTO students(surname, name, patronymic, phone, telegram, mail, git) VALUES
-		(#{args['surname']}, #{args['name']}, #{args['patronymic']},
-    #{args['phone']}, #{args['telegram']}, #{args['mail']}, #{args['git']})")
+  def select_by_id(table_name, id, select_args)
+    query_to_list("SELECT #{args_to_str(select_args)} FROM #{table_name} WHERE id=#{id}")[0]
   end
 
-  def delete_by_id(id)
-    @db_client.query("DELETE FROM students WHERE id = #{id}")
+  def insert(table_name, values_hash)
+    raise ArgumentError, "arg 'values_hash' must be Hash" unless values_hash.class == Hash
+    @db_client.query("INSERT INTO #{table_name}(#{args_to_str(values_hash.keys)}) VALUES
+		(#{args_to_str(values_hash.values)})")
   end
 
-  def update_by_id(id, args)
-    @db_client.query("UPDATE students SET surname=#{args['surname']}, name = #{args['name']},
-            patronymic=#{args['patronymic']}, phone=#{args['phone']},
-            telegram=#{args['telegram']}, mail=#{args['mail']}, git=#{args['git']}
-            WHERE id=#{id}")
+  def delete_by_id(table_name, id)
+    @db_client.query("DELETE FROM #{table_name} WHERE id = #{id}")
+  end
+
+  def update_by_id(table_name, id, args)
+    keys = args.keys
+    values_set = []
+    keys.each{|key| values_set << "#{key} = #{args[key]}" }
+    @db_client.query("UPDATE #{table_name} SET #{values_set.join(',')} WHERE id=#{id}")
   end
 
 end
