@@ -1,21 +1,31 @@
 # frozen_string_literal: true
-require_relative 'operations'
+require_relative 'strategy'
+require_relative 'sum'
+require_relative 'mult'
+require_relative 'div'
 
-#суперкласс
+
 class X_and_Y
-  attr_reader :x, :y
+  attr_accessor :x, :y
 
-  def initialize(x, y)
-    @x = x
-    @y = y
+  def initialize(x, y, operation)
+    self.x = x
+    self.y = y
 
     #создаем объект класса стратегии для использования
     #его методов
-    @operation = Operations.new
+    @operation = operation
+  end
+
+  def set_operation(operation)
+    @operation = operation
   end
 
   #метод, который в каждом наследнике должен отличаться
   def calc
-    @operation.addition(self)
+    @operation.calc(self)
   end
 end
+
+x_and_y = X_and_Y.new(1,2, Sum.new)
+puts x_and_y.calc

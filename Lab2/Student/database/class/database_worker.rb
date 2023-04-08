@@ -59,4 +59,12 @@ class Database_student_worker
     @db_client.query("UPDATE #{table_name} SET #{values_set.join(',')} WHERE id=#{id}")
   end
 
+  def clone
+    raise NoMethodError, "you can't clone Singleton class"
+  end
+
+  def dub
+    raise NoMethodError, "you can't dub Singleton class"
+  end
+
 end
