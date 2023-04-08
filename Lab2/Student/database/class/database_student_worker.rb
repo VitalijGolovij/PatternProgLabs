@@ -1,9 +1,19 @@
 # frozen_string_literal: true
 require 'mysql2'
-
+require 'yaml'
 class Database_student_worker
+  private_class_method :new
+  @instance = nil
   def initialize(options={})
     @db_client = Mysql2::Client.new(options)
+  end
+
+  def self.get_instance(options = nil)
+    if options
+      @instance ||= new(options)
+    else
+      @instance
+    end
   end
 
   #вернуть результат запроса в виде Array
@@ -28,7 +38,7 @@ class Database_student_worker
     query_to_list("SELECT #{args_to_str(select_args)} FROM #{table_name}")
   end
 
-  def select_by_id(table_name, id, select_args)
+  def select_by_id(table_name, id, select_args = nil)
     query_to_list("SELECT #{args_to_str(select_args)} FROM #{table_name} WHERE id=#{id}")[0]
   end
 
