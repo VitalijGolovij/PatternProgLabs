@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'mysql2'
 require 'yaml'
-class Database_student_worker
+class DatabaseWorker
   private_class_method :new
   @instance = nil
   def initialize(options={})
@@ -63,7 +63,7 @@ class Database_student_worker
     raise NoMethodError, "you can't clone Singleton class"
   end
 
-  def dub
+  def dup
     raise NoMethodError, "you can't dub Singleton class"
   end
 

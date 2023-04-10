@@ -88,8 +88,9 @@ Class Data_table
       +rows_count(): Integer
       +columns_count(): Integer
   }
-Class Student_list extends Data_list
+Class Student_list
 {
++list: Array
 +file_worker: Student_list_file_worker
 +id_counter
 --
@@ -134,6 +135,33 @@ Class Student_list_YAML extends Student_list_file_worker
 +read_from_file(String): Array
 +write_to_file(String, Hash)
 }
+Class Database_student_worker
+{
+db_worker: Mysql2::Client
+--
+-query_to_list(Strind): Array
+-args_to_string(Array): String
++select(String, Array): Array
++select_by_id(String, Integer, Array): Array
++insert(String, Hash)
++delete_by_id(String, Integer)
++update_by_id(String, Integer, Hash)
+}
+Class Student_list_DB
+{
+db_client: Database_student_worker
+--
+-initialise(Hash)
++{static} get_instance (Hash): Database_student_worker
++insert_student(Student)
++replace_by_id(Integer, Student)
++drop_by_id(Integer)
++get_student_short_count: Integer
++get_student_by_id(Integer): Student
++get_k_n_student_short_list(Integer, Intefer, Data_list): Data_list_student_short
++get_student_count: Integer
+}
+Database_student_worker--*Student_list_DB
 Student_list_file_worker --* Student_list
 Data_list_student_short --> Data_table
 Student_list *-- Student

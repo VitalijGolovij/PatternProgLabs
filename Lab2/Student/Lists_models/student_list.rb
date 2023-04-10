@@ -3,10 +3,10 @@ require_relative 'data_list'
 require_relative 'student_list_file_worker'
 
 class Student_list
-  attr_reader :list
+  private attr_reader :list
 
   def initialize(student_list_file_worker)
-    @list=[]
+    self.list=[]
     set_file_worker(student_list_file_worker)
     @id_counter = 1
   end

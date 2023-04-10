@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 require_relative 'student_list'
-require_relative '../database/class/database_student_worker'
+require_relative '../database/class/database_worker'
 require 'mysql2'
 require 'yaml'
 
 class Student_list_DB
   def initialize(options = {})
-    @db_worker = Database_student_worker.new(options)
+    @db_worker = DatabaseWorker.get_instance(options)
   end
 
   def get_student_by_id(id)
