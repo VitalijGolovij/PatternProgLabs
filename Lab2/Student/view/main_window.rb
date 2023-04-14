@@ -1,13 +1,25 @@
 # frozen_string_literal: true
 require 'fox16'
 require_relative 'page_list_view'
+require_relative 'page_view'
+require_relative 'page_list'
+require_relative 'page_students'
+require_relative 'page_other'
 include Fox
 
 class Main_window < FXMainWindow
   def initialize(app)
     super(app, "Student Book", :width => 800, :height => 600)
     add_menu_bar
-    @page_list_view = Page_list_view.new(self, LAYOUT_FILL_Y|LAYOUT_SIDE_LEFT, [])
+    @splitter = FXSplitter.new(self, :opts => SPLITTER_HORIZONTAL|LAYOUT_FILL)
+
+    @switcher = FXSwitcher.new(@splitter, :opts => LAYOUT_FILL)
+    @page_list_view = Page_list_view.new(@splitter, LAYOUT_FILL_Y|LAYOUT_SIDE_LEFT, [Page_students.new(@switcher), Page_other.new(@switcher)])
+    @switcher.connect(SEL_UPDATE) do
+      @switcher.current = @page_list_view.currentItem
+    end
+    @page_list_view.switcher = @switcher
+    @page_view = Page_view.new(@switcher)
   end
 
   def add_menu_bar
@@ -31,6 +43,14 @@ class Main_window < FXMainWindow
 
   def import_students(filenames)
 
+  end
+
+  def current_page_view
+    @switcher.childAtIndex(@switcher.current)
+  end
+
+  def current_page
+    current_page_view.page
   end
 
   def create
