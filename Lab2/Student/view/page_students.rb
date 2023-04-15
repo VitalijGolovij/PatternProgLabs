@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 require_relative 'page'
+require_relative '../Lists_models/student_list'
+require_relative '../Lists_models/student_list_json'
 require 'fox16'
 include Fox
 
@@ -8,22 +10,6 @@ class Page_students < Page
   def initialize(parent)
     super(parent, 'students list')
     @parameters_combobox = Hash.new
-    # hFrame1 = FXHorizontalFrame.new(self)
-    # chrLabel = FXLabel.new(hFrame1, "Number of characters in password:")
-    # chrTextField = FXTextField.new(hFrame1, 4)
-    #
-    # hFrame2 = FXHorizontalFrame.new(self)
-    # @includeSpecialCharacters = false
-    # specialChrsCheck = FXCheckButton.new(hFrame2, "Include special chars in pass")
-    #
-    # vFrame1 = FXVerticalFrame.new(self, :opts => LAYOUT_FILL)
-    # textArea = FXText.new(vFrame1, :opts => LAYOUT_FILL | TEXT_READONLY | TEXT_WORDWRAP)
-    # hFrame3 = FXHorizontalFrame.new(vFrame1)
-    # generateButton = FXButton.new(hFrame3, "Generate")
-    # copyButton = FXButton.new(hFrame3, "Copy to clipboard")
-
-
-    # @splitter = FXSplitter.new(self,:opts=>HORIZONTAL_SPLITTER|LAYOUT_FILL)
     main_frame = FXHorizontalFrame.new(self, :opts => LAYOUT_FILL)
     make_filter_area(main_frame)
     make_table_area(main_frame)
@@ -62,7 +48,36 @@ class Page_students < Page
 
   def make_table_area(parent)
     v_frame_table = FXVerticalFrame.new(parent)
-    table = FXTable.new(v_frame_table, :opts => LAYOUT_EXPLICIT, :width => 450, :height => 600)
+    table_packer = FXPacker.new(v_frame_table)
+    table = FXTable.new(table_packer, :opts => LAYOUT_EXPLICIT, :width => 701, :height => 450)
+
+    table.setTableSize(20,6)
+    table.setColumnText(0,'Id')
+    table.setColumnText(1,'Shortname')
+    table.setColumnText(2,'Git')
+    table.setColumnText(3,'Phone')
+    table.setColumnText(4,'Main')
+    table.setColumnText(5,'Telegram')
+    fill_table(table)
+    buttons_packer = FXPacker.new(v_frame_table, :opts => LAYOUT_FILL)
+    hframe = FXHorizontalFrame.new(buttons_packer,
+                                   :opts => LAYOUT_SIDE_BOTTOM|LAYOUT_FILL_X)
+    next_button = FXButton.new(hframe, ">" ,
+                          :opts => BUTTON_NORMAL|LAYOUT_RIGHT)
+    prev_button = FXButton.new(hframe, "<" ,
+                          :opts => BUTTON_NORMAL|LAYOUT_LEFT)
+    pages_count = FXLabel.new(hframe, "1/1",
+                              :opts=> LAYOUT_CENTER_X)
+
+  end
+
+  def fill_table(table)
+    test_table = [['1','b','c','d','e','a'],['1','b','c','d','e','a'],['1','b','c','d','e','a']]
+    (0..test_table.length-1).each do |i|
+      (0..test_table[i].length-1).each do |j|
+        table.setItemText(i,j,test_table[i][j])
+      end
+    end
   end
 
   def make_manage_buttons(parent)

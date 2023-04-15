@@ -9,12 +9,16 @@ include Fox
 
 class Main_window < FXMainWindow
   def initialize(app)
-    super(app, "Student Book", :width => 800, :height => 600)
+    super(app, "Student Book", :width => 1200, :height => 600)
     add_menu_bar
     @splitter = FXSplitter.new(self, :opts => SPLITTER_HORIZONTAL|LAYOUT_FILL)
 
     @switcher = FXSwitcher.new(@splitter, :opts => LAYOUT_FILL)
-    @page_list_view = Page_list_view.new(@splitter, LAYOUT_FILL_Y|LAYOUT_SIDE_LEFT, [Page_students.new(@switcher), Page_other.new(@switcher)])
+    @pages_list = [
+      Page_students.new(@switcher),
+      Page_other.new(@switcher)
+    ]
+    @page_list_view = Page_list_view.new(@splitter, LAYOUT_FILL_Y|LAYOUT_SIDE_LEFT, @pages_list)
     @switcher.connect(SEL_UPDATE) do
       @switcher.current = @page_list_view.currentItem
     end
