@@ -20,13 +20,19 @@ class Page_students < Page
     # textArea = FXText.new(vFrame1, :opts => LAYOUT_FILL | TEXT_READONLY | TEXT_WORDWRAP)
     # hFrame3 = FXHorizontalFrame.new(vFrame1)
     # generateButton = FXButton.new(hFrame3, "Generate")
-    # copyButton = FXButton.new(hFrame3, "Copy to clipboard"
-    make_filter_area
+    # copyButton = FXButton.new(hFrame3, "Copy to clipboard")
+
+
+    # @splitter = FXSplitter.new(self,:opts=>HORIZONTAL_SPLITTER|LAYOUT_FILL)
+    main_frame = FXHorizontalFrame.new(self, :opts => LAYOUT_FILL)
+    make_filter_area(main_frame)
+    make_table_area(main_frame)
+    make_manage_buttons(main_frame)
   end
 
   protected
-  def make_filter_area
-    v_frame_filter = FXVerticalFrame.new(self)
+  def make_filter_area(parent)
+    v_frame_filter = FXVerticalFrame.new(parent)
     FXLabel.new(v_frame_filter, "shortname:")
     FXTextField.new(v_frame_filter,15)
     make_parameter_filter(v_frame_filter, 'git')
@@ -35,12 +41,11 @@ class Page_students < Page
     make_parameter_filter(v_frame_filter,'telegram')
   end
 
-
   def make_parameter_filter(parent, parameter_name)
     FXLabel.new(parent,"#{parameter_name}:")
-    combo_box = FXComboBox.new(parent,1,:opts => COMBOBOX_STATIC)
+    combo_box = FXComboBox.new(parent,1,:opts => COMBOBOX_STATIC|LAYOUT_LEFT)
 
-    git_field = FXTextField.new(parent,15)
+    git_field = FXTextField.new(parent,15, :opts => LAYOUT_SIDE_LEFT)
     git_field.disable
 
     combo_box.fillItems(['doesn\'t matter', 'yes', 'no'])
@@ -53,5 +58,17 @@ class Page_students < Page
       end
     end
     @parameters_combobox[parameter_name] = combo_box
+  end
+
+  def make_table_area(parent)
+    v_frame_table = FXVerticalFrame.new(parent)
+    table = FXTable.new(v_frame_table, :opts => LAYOUT_EXPLICIT, :width => 450, :height => 600)
+  end
+
+  def make_manage_buttons(parent)
+    v_frame = FXVerticalFrame.new(parent, :opts => LAYOUT_FILL | PACK_UNIFORM_WIDTH)
+    add_button = FXButton.new(v_frame, 'Add')
+    edit_button = FXButton.new(v_frame, 'Edit')
+    delete_button = FXButton.new(v_frame, 'Delete')
   end
 end
