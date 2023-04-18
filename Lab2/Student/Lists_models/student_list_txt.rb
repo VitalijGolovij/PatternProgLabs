@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require_relative 'student_list'
+require_relative 'student_list_file'
 require_relative '../Student_models/Student'
 class Student_list_txt < Student_list_file_worker
   public_class_method :new

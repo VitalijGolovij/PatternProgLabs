@@ -88,13 +88,13 @@ Class Data_table
       +rows_count(): Integer
       +columns_count(): Integer
   }
-Class Student_list
+Class Student_list_file
 {
-+list: Array
+-list: Array
 +file_worker: Student_list_file_worker
 +id_counter
 --
-      +initialize()
+      -initialize()
 +read_from_file(String): Array
 +write_to_file(String)
 +write_to_file(String)
@@ -106,6 +106,43 @@ Class Student_list
       +replace_by_id(Integer)
       +drop_by_id(Integer)
       +get_student_short_count(): Integer
+}
+
+Class Student_list_file_adapter extends Student_list_data_worker
+{
+file_path: String
+student_list_file: Student_list_file
+--
++initialize(Student_list_file_worker, String)
++get_student_by_id(Integer): Student
++get_k_n_student_short_list(Integer, Integer, Data_list): Student_short_data_list
++insert_student(Student)
++replace_by_id(Integer, Student)
++drop_by_id(Integer, Student)
++get_student_count: Integer
+}
+
+Class Student_list
+{
+--
++initialize(Student_list_Data_worker)
++get_student_by_id(Integer): Student
++get_k_n_student_short_list(Integer, Integer, Data_list): Student_short_data_list
++insert_student(Student)
++replace_by_id(Integer, Student)
++drop_by_id(Integer, Student)
++get_student_count: Integer
+}
+abstract class Student_list_data_worker
+{
+--
+-initialize()
++get_student_by_id(Integer)
++get_k_n_student_short_list(Integer, Integer, Data_list)
++insert_student(Student)
++replace_by_id(Integer, Student)
++drop_by_id(Integer, Student)
++get_student_count
 }
 
 Class Student_list_file_worker
@@ -147,7 +184,7 @@ db_worker: Mysql2::Client
 +delete_by_id(String, Integer)
 +update_by_id(String, Integer, Hash)
 }
-Class Student_list_DB
+Class Student_list_DB extends Student_list_data_worker
 {
 db_client: Database_student_worker
 --
@@ -162,7 +199,9 @@ db_client: Database_student_worker
 +get_student_count: Integer
 }
 Database_student_worker--*Student_list_DB
-Student_list_file_worker --* Student_list
+Student_list_data_worker --* Student_list
+Student_list_file_worker --* Student_list_file
+Student_list_file --* Student_list_file_adapter
 Data_list_student_short --> Data_table
-Student_list *-- Student
+Student_list_file *-- Student
 @enduml

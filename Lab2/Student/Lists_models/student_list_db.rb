@@ -1,10 +1,13 @@
 # frozen_string_literal: true
-require_relative 'student_list'
+require_relative 'student_list_file'
 require_relative '../database/class/database_worker'
+require_relative 'data_list_student_short'
+require_relative '../Student_models/Student_short'
 require 'mysql2'
 require 'yaml'
 
-class Student_list_DB
+class Student_list_DB < Student_list_data_worker
+  public_class_method :new
   def initialize(options = {})
     @db_worker = DatabaseWorker.get_instance(options)
   end
@@ -25,11 +28,15 @@ class Student_list_DB
   end
 
   def insert_student(student)
-    @db_worker.insert('students', student.to_hash)
+    student_hash = student.to_hash
+    student_hash.delete(:id)
+    @db_worker.insert('students', student_hash)
   end
 
   def replace_by_id(id, student)
-    @db_worker.update_by_id('students', id, student.to_hash)
+    student_hash = student.to_hash
+    student_hash.delete(:id)
+    @db_worker.update_by_id('students', id, student_hash)
   end
 
   def drop_by_id(id)

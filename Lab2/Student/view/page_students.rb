@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 require_relative 'page'
-require_relative '../Lists_models/student_list'
+require_relative '../Lists_models/student_list_file'
 require_relative '../Lists_models/student_list_json'
 require 'fox16'
 include Fox

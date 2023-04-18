@@ -9,12 +9,14 @@ class Student < Student_short
   attr_reader :surname, :patronymic, :phone, :mail, :telegram
 
   def initialize(options = {})
-    self.id = options['id']
-    self.name = options['name']
-    self.surname = options['surname']
-    self.patronymic = options['patronymic']
-    self.git = options['git']
-    set_contact(phone: options['phone'], mail: options['mail'], telegram: options['telegram'])
+    self.id = (options['id'] or options[:id])
+    self.name = (options['name'] or options[:name])
+    self.surname = (options['surname'] or options[:surname])
+    self.patronymic = (options['patronymic'] or options[:patronymic])
+    self.git = (options['git'] or options[:git])
+    set_contact(phone: (options['phone'] or options[:phone]),
+                mail: (options['mail'] or options[:mail]),
+                telegram: (options['telegram'] or options[:telegram]))
   end
 
   #init from json string

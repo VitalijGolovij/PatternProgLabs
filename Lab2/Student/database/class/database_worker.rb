@@ -25,6 +25,10 @@ class DatabaseWorker
     _list
   end
 
+  protected def values_to_str(select_values)
+    select_values.map{|val| val = "'#{val}'"}.join(',')
+  end
+
   protected def args_to_str(select_args)
     if select_args
       raise ArgumentError, "arg 'select_args' must be Array" unless select_args.class == Array
@@ -45,7 +49,7 @@ class DatabaseWorker
   def insert(table_name, values_hash)
     raise ArgumentError, "arg 'values_hash' must be Hash" unless values_hash.class == Hash
     @db_client.query("INSERT INTO #{table_name}(#{args_to_str(values_hash.keys)}) VALUES
-		(#{args_to_str(values_hash.values)})")
+		(#{values_to_str(values_hash.values)})")
   end
 
   def delete_by_id(table_name, id)
@@ -55,7 +59,7 @@ class DatabaseWorker
   def update_by_id(table_name, id, args)
     keys = args.keys
     values_set = []
-    keys.each{|key| values_set << "#{key} = #{args[key]}" }
+    keys.each{|key| values_set << "#{key} = '#{args[key]}'" }
     @db_client.query("UPDATE #{table_name} SET #{values_set.join(',')} WHERE id=#{id}")
   end
 
@@ -68,3 +72,5 @@ class DatabaseWorker
   end
 
 end
+
+#проверить insert
