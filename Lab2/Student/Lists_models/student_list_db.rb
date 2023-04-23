@@ -3,6 +3,7 @@ require_relative 'student_list_file'
 require_relative '../database/class/database_worker'
 require_relative 'data_list_student_short'
 require_relative '../Student_models/Student_short'
+require_relative 'student_list_data_worker'
 require 'mysql2'
 require 'yaml'
 

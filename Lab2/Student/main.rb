@@ -17,17 +17,19 @@ require 'mysql2'
 require 'fox16'
 include Fox
 
-test_list = Student_list.new(Student_list_DB.new(YAML.load(File.open('database/config/connect_db_hash.yaml'))))
-puts test_list.get_student_by_id(1)
-puts test_list.get_k_n_student_short_list(1,4).list
-puts test_list.insert_student(Student_randomizer.new.generate_student)
+# test_list = Student_list.new(Student_list_DB.new(YAML.load(File.open('database/config/connect_db_hash.yaml'))))
+# puts test_list.get_student_by_id(1)
+# puts test_list.get_k_n_student_short_list(1,4).list
+# puts test_list.insert_student(Student_randomizer.new.generate_student)
+#
+# a = Student_randomizer.new.generate_student
+# puts a
+# test_list.replace_by_id(5,a)
+# puts test_list.get_student_by_id(5)
+# puts test_list.get_students_count
 
-a = Student_randomizer.new.generate_student
-puts a
-test_list.replace_by_id(5,a)
-puts test_list.get_student_by_id(5)
-puts test_list.get_students_count
+test_list2 = Student_list.new(Student_list_file_adapter.new(Student_list_JSON.new, 'result_files/input.json'))
+puts test_list2.get_k_n_student_short_list(20,3).list
 
-test_list2 = Student_list.new(Student_list_file_adapter.new(Student_list_JSON.new(), 'result_files/input.json'))
-test_list2.insert_student(Student_randomizer.new.generate_student)
-puts test_list2.get_k_n_student_short_list(3,5).list
+
+#k-длина списка n-пачка посчету

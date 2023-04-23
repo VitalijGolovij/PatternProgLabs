@@ -15,6 +15,10 @@ class Data_list
     @selected << number unless @selected.include?(number)
   end
 
+  def [](other)
+    self.list[other]
+  end
+
   def get_selected
     selected_student_id = []
     @selected.each{ |selected_number| selected_student_id << @list[selected_number].id }

@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+require_relative 'student_list_data_worker'
+require_relative 'student_list_file'
 
 class Student_list_file_adapter < Student_list_data_worker
   public_class_method :new

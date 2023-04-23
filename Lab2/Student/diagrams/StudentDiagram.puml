@@ -77,6 +77,9 @@ Class Data_list_student_short extends Data_list
  --
       -get_names(): Array
       -fill_row(Array, Array) :Array
++add_observer(Object)
++delete_observer(Object)
++notify
   }
 
 Class Data_table
@@ -181,6 +184,7 @@ db_worker: Mysql2::Client
 +select(String, Array): Array
 +select_by_id(String, Integer, Array): Array
 +insert(String, Hash)
++{static} get_instance (Hash): Database_student_worker
 +delete_by_id(String, Integer)
 +update_by_id(String, Integer, Hash)
 }
@@ -189,15 +193,36 @@ Class Student_list_DB extends Student_list_data_worker
 db_client: Database_student_worker
 --
 -initialise(Hash)
-+{static} get_instance (Hash): Database_student_worker
+
 +insert_student(Student)
 +replace_by_id(Integer, Student)
 +drop_by_id(Integer)
-+get_student_short_count: Integer
 +get_student_by_id(Integer): Student
 +get_k_n_student_short_list(Integer, Intefer, Data_list): Data_list_student_short
 +get_student_count: Integer
 }
+
+
+class Student_list_controller
+{
+view: Page_student
+student_list: Student_list
+cur_table_page: Integer
+all_table_pages: Integer
+data_list_student_short: Data_list_student_short
+--
++refresh_data(Integer)
++add_student
++delete_student
++edit_student
++set_page_count
++next_page
++prev_page
+}
+
+Student_list_controller o-- Student_list
+
+Student_list_controller o-- Data_list_student_short
 Database_student_worker--*Student_list_DB
 Student_list_data_worker --* Student_list
 Student_list_file_worker --* Student_list_file

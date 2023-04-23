@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require_relative 'data_list'
 require_relative 'student_list_file_worker'
+require_relative 'data_list_student_short'
 
 class Student_list_file
   protected attr_reader :list
