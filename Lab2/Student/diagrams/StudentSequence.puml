@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+
+actor       User                                as user
+boundary    "mw: Main_window"                   as mw
+boundary    "sp: Student_page"                  as sp
+control     "slc: Student_list_controller"      as slc
+entity      "sl: Student_list"                  as sl
+entity      "dlss: Data_list_student_short"     as dlss
+
+user -> mw : Open
+mw -> sp : <<new>>
+sp -> slc : <<new>>
+slc -> sl : <<new>>
+sl --> slc
+slc --> sp
+sp -> slc : refresh_data
+slc -> sl : get_k_n_student_short
+sl -> dlss : <<new>>
+dlss --> slc
+slc -> dlss : add_observer
+dlss --> slc
+slc -> dlss : notify
+dlss --> sp : set_table_params
+sp -> dlss
+dlss --> sp : set_table_data
+sp -> dlss
+dlss --> slc
+slc --> sp
+sp --> mw
+
+@enduml
