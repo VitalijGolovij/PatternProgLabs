@@ -18,7 +18,7 @@ class Page_students < Page
     make_manage_buttons(main_frame)
 
     @controller = Student_list_controller.new(self)
-    @controller.refresh_data(1)
+    @controller.refresh_data
   end
 
   def set_table_data(data_table)
@@ -93,6 +93,9 @@ class Page_students < Page
   def make_manage_buttons(parent)
     v_frame = FXVerticalFrame.new(parent, :opts => LAYOUT_FILL | PACK_UNIFORM_WIDTH)
     add_button = FXButton.new(v_frame, 'Add')
+    add_button.connect(SEL_COMMAND) do
+      @controller.add_student
+    end
     edit_button = FXButton.new(v_frame, 'Edit')
     delete_button = FXButton.new(v_frame, 'Delete')
   end

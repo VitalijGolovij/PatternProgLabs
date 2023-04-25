@@ -25,7 +25,7 @@ class Data_list
     selected_student_id
   end
 
-  protected def list=(other)
+  def list=(other)
     raise ArgumentError, "arg 'objects_list' must be Array" if other.class != Array
     @list = other
   end

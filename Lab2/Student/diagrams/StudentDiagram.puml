@@ -80,6 +80,8 @@ Class Data_list_student_short extends Data_list
 +add_observer(Object)
 +delete_observer(Object)
 +notify
+..Setters..
++list=(Array)
   }
 
 Class Data_table
@@ -211,17 +213,30 @@ cur_table_page: Integer
 all_table_pages: Integer
 data_list_student_short: Data_list_student_short
 --
-+refresh_data(Integer)
++refresh_data
 +add_student
 +delete_student
 +edit_student
-+set_page_count
++set_page_counter
 +next_page
 +prev_page
 }
 
-Student_list_controller o-- Student_list
+class Page_student
+{
+controller: Student_list_controller
+--
++initialize
++set_table_data(Data_table)
++set_table_params(Array, Integer)
+-make_filter_area
+-make_parametr_filter
+-make_table_area
+-make_manage_buttons
+}
 
+Student_list_controller o-- Student_list
+Student_list_controller --* Page_student
 Student_list_controller o-- Data_list_student_short
 Database_student_worker--*Student_list_DB
 Student_list_data_worker --* Student_list

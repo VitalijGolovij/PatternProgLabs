@@ -20,11 +20,18 @@ class Data_list_student_short < Data_list
     @observers.delete(observer)
   end
 
+  def list=(other)
+    super
+    notify
+  end
+
   #реакция наблюдателей на изменения
   def notify
-    @observers.each do |obs|
-      obs.set_table_params(get_names, 20)
-      obs.set_table_data(get_data)
+    if @observers
+      @observers.each do |obs|
+        obs.set_table_params(get_names, 20)
+        obs.set_table_data(get_data)
+      end
     end
   end
 

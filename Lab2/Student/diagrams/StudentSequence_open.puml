@@ -14,21 +14,19 @@ user -> mw : Open
 mw -> sp : <<new>>
 sp -> slc : <<new>>
 slc -> sl : <<new>>
-sl --> slc
-slc --> sp
+sl -> dlss : <<new>>
+sl <-- dlss
+slc <-- sl
+slc -> dlss : add_observer
+slc <-- dlss
+sp <-- slc
 sp -> slc : refresh_data
 slc -> sl : get_k_n_student_short
-sl -> dlss : <<new>>
-dlss --> slc
-slc -> dlss : add_observer
-dlss --> slc
-slc -> dlss : notify
-dlss --> sp : set_table_params
-sp -> dlss
-dlss --> sp : set_table_data
-sp -> dlss
-dlss --> slc
-slc --> sp
-sp --> mw
+sl -> dlss : list=
+dlss -> dlss : notify
+sp <- dlss : set_table_params
+sp --> dlss
+sp <- dlss : set_table_data
+user <-- sp
 
 @enduml
