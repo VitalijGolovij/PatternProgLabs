@@ -7,7 +7,8 @@ require 'fox16'
 include Fox
 
 class Page_students < Page
-  attr_reader :parameters_combobox, :table, :pages_count
+  attr_reader :parameters_combobox, :table, :pages_count,
+              :controller
   def initialize(parent)
     super(parent, 'students list')
     @parameters_combobox = Hash.new

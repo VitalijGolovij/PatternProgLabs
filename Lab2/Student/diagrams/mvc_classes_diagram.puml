@@ -1,0 +1,100 @@
+@startuml
+
+Class Data_list
+ {
+      -list: Array
+      -selected: Array
+ --
+      +{static}initialize(Array)
+      +select(Integer)
+      +get_selected(): Array
+      +get_data(): Data_table
+      -get_names(): Array
+      -fill_row(Array, Array): Array
+      -fill_table(Array, Array): Array
+..Сеттеры..
+      +list=(Array)
+  }
+
+Class Data_list_student_short
+ {
+ --
+      -get_names(): Array
+      -fill_row(Array, Array) :Array
++add_observer(Object)
++delete_observer(Object)
++notify
+..Setters..
++list=(Array)
+  }
+Class Student_list
+{
+--
++initialize(Student_list_Data_worker)
++get_student_by_id(Integer): Student
++get_k_n_student_short_list(Integer, Integer, Data_list): Student_short_data_list
++insert_student(Student)
++replace_by_id(Integer, Student)
++drop_by_id(Integer, Student)
++get_student_count: Integer
+}
+
+class Page_student
+{
+controller: Student_list_controller
+--
++initialize
++set_table_data(Data_table)
++set_table_params(Array, Integer)
+-make_filter_area
+-make_parametr_filter
+-make_table_area
+-make_manage_buttons
+}
+
+class Student_list_controller
+{
+view: Page_student
+student_list: Student_list
+cur_table_page: Integer
+all_table_pages: Integer
+data_list_student_short: Data_list_student_short
+--
++refresh_data
++add_student
++delete_student
++edit_student
++set_page_counter
++next_page
++prev_page
+}
+
+class Add_student_window
+{
+controller: Add_student_controller
+--
+-add_terminating_buttons
+-add_input_textfields
+-add_event_on_textfields
+}
+
+class Add_student_controller
+{
+view: Add_student_window
+--
++add_student
++change_button_state
++check_valid
++get_student_hash
+}
+
+Data_list <|-- Data_list_student_short
+Student_list_controller --* Page_student
+Student_list_controller o-- Page_student
+Student_list --o Student_list_controller
+Data_list_student_short --o Student_list_controller
+Student_list_controller o-- Add_student_window
+Add_student_controller --* Add_student_window
+Add_student_controller o-- Add_student_window
+
+@enduml

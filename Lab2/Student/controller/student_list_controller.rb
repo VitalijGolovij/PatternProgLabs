@@ -10,6 +10,7 @@ require 'fox16'
 include Fox
 
 class Student_list_controller
+  attr_reader :student_list
   def initialize(view)
     @view = view
 
@@ -29,8 +30,12 @@ class Student_list_controller
   end
 
   def add_student
-    Add_student_window.new(@view).execute
+    dialog_box = Add_student_window.new(@view)
+    dialog_box.create
+    dialog_box.show(PLACEMENT_SCREEN)
+    refresh_data
   end
+
 
   def delete_student
 
