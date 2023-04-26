@@ -32,7 +32,6 @@ class Student_list_file
 
   def get_k_n_student_short_list(k, n, data_list = nil)
     if data_list
-      raise ArgumentError, "overflow indexes" if data_list.list.size < k * (n - 1) + 1
       Data_list_student_short.new(data_list.list[k * (n - 1), k])
     else
       raise ArgumentError, "overflow indexes" if self.list.size < k * (n - 1) + 1

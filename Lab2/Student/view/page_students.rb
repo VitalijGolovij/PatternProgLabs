@@ -7,12 +7,11 @@ require 'fox16'
 include Fox
 
 class Page_students < Page
-  attr_reader :parameters_combobox, :table, :pages_count,
-              :controller
+  attr_reader :parameters_fields, :table, :pages_count,
+              :controller, :shortname_field
   def initialize(parent)
     super(parent, 'students list')
-    @parameters_combobox = Hash.new
-
+    @parameters_fields = Hash.new
     main_frame = FXHorizontalFrame.new(self, :opts => LAYOUT_FILL)
     make_filter_area(main_frame)
     make_table_area(main_frame)
@@ -44,7 +43,10 @@ class Page_students < Page
   def make_filter_area(parent)
     v_frame_filter = FXVerticalFrame.new(parent)
     FXLabel.new(v_frame_filter, "shortname:")
-    FXTextField.new(v_frame_filter,15)
+    @shortname_field = FXTextField.new(v_frame_filter,15)
+    @shortname_field.connect(SEL_CHANGED) do
+      @controller.refresh_data
+    end
     make_parameter_filter(v_frame_filter, 'git')
     make_parameter_filter(v_frame_filter,'mail')
     make_parameter_filter(v_frame_filter,'phone')
@@ -55,19 +57,22 @@ class Page_students < Page
     FXLabel.new(parent,"#{parameter_name}:")
     combo_box = FXComboBox.new(parent,1,:opts => COMBOBOX_STATIC|LAYOUT_LEFT)
 
-    git_field = FXTextField.new(parent,15, :opts => LAYOUT_SIDE_LEFT)
-    git_field.disable
+    parametr_field = FXTextField.new(parent,15, :opts => LAYOUT_SIDE_LEFT)
+    parametr_field.connect(SEL_CHANGED) do
+      @controller.refresh_data
+    end
+    parametr_field.disable
 
     combo_box.fillItems(['doesn\'t matter', 'yes', 'no'])
     combo_box.numVisible = 3
     combo_box.connect(SEL_COMMAND) do
       if combo_box.currentItem == 1
-        git_field.enable
+        parametr_field.enable
       else
-        git_field.disable
+        parametr_field.disable
       end
     end
-    @parameters_combobox[parameter_name] = combo_box
+    @parameters_fields[parameter_name] = parametr_field
   end
 
   def make_table_area(parent)

@@ -15,7 +15,7 @@ user -> sp : click "add" button
 sp -> slc : add_student
 slc -> asw : <<new>>
 asw -> asc : <<new>>
-user <-- asc : 
+user <-- asc :
 user -> asw : click <<Ok>>
 asw -> asc : add_student
 asc -> asc :check valid

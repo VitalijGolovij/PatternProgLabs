@@ -67,6 +67,8 @@ data_list_student_short: Data_list_student_short
 +set_page_counter
 +next_page
 +prev_page
++filter
++get_all_table_pages_count
 }
 
 class Add_student_window
