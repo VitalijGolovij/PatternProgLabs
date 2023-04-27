@@ -8,7 +8,8 @@ include Fox
 
 class Page_students < Page
   attr_reader :parameters_fields, :table, :pages_count,
-              :controller, :shortname_field
+              :controller, :shortname_field, :add_button,
+              :delete_button, :edit_button
   def initialize(parent)
     super(parent, 'students list')
     @parameters_fields = Hash.new
@@ -79,6 +80,9 @@ class Page_students < Page
     v_frame_table = FXVerticalFrame.new(parent)
     table_packer = FXPacker.new(v_frame_table)
     @table = FXTable.new(table_packer, :opts => LAYOUT_EXPLICIT, :width => 701, :height => 422)
+    @table.connect(SEL_SELECTED) do
+      @controller.process_select_cell
+    end
     buttons_packer = FXPacker.new(v_frame_table, :opts => LAYOUT_FILL)
     hframe = FXHorizontalFrame.new(buttons_packer,
                                    :opts => LAYOUT_SIDE_BOTTOM|LAYOUT_FILL_X)
@@ -98,12 +102,19 @@ class Page_students < Page
 
   def make_manage_buttons(parent)
     v_frame = FXVerticalFrame.new(parent, :opts => LAYOUT_FILL | PACK_UNIFORM_WIDTH)
-    add_button = FXButton.new(v_frame, 'Add')
-    add_button.connect(SEL_COMMAND) do
+    @add_button = FXButton.new(v_frame, 'Add')
+    @add_button.connect(SEL_COMMAND) do
       @controller.add_student
     end
-    edit_button = FXButton.new(v_frame, 'Edit')
-    delete_button = FXButton.new(v_frame, 'Delete')
+    @edit_button = FXButton.new(v_frame, 'Edit')
+    @edit_button.connect(SEL_COMMAND) do
+      @controller.edit_student
+      @controller.refresh_data
+    end
+    @delete_button = FXButton.new(v_frame, 'Delete')
+    @delete_button.connect(SEL_COMMAND) do
+      @controller.delete_student
+    end
   end
 end
 

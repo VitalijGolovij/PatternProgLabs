@@ -7,20 +7,21 @@ actor       User                                as user
 boundary    "sp: Student_page"                  as sp
 control     "slc: Student_list_controller"      as slc
 boundary    "asw: Input_student_window"           as asw
-boundary    "asc: Add_student_controller"       as asc
+boundary    "asc: Edit_student_controller"       as asc
 entity      "sl: Student_list"                  as sl
 entity      "dlss: Data_list_student_short"     as dlss
 
-user -> sp : click "add" button
-sp -> slc : add_student
+user -> sp : click "edit" button
+sp -> slc : edit_student
 slc -> asw : <<new>>
 asw -> asc : <<new>>
+asc -> asc : set_textfields
 user <-- asc :
 user -> asw : click <<Ok>>
-asw -> asc : add_student
+asw -> asc : accept_student
 asc -> asc :check valid
 asc -> asc :get_student_hash
-asc -> sl : insert_student
+asc -> sl : replace_student_by_id
 asc <-- sl
 asw <- asc : close
 slc <-- asw

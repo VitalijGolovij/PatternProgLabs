@@ -58,7 +58,7 @@ class Student < Student_short
   end
 
   def shortname
-    self.name + " " + self.surname[0].upcase + ". " + self.patronymic[0].upcase + "."
+    self.surname + " " + self.name[0].upcase + ". " + self.patronymic[0].upcase + "."
   end
 
   private def get_any_contact
@@ -98,16 +98,28 @@ class Student < Student_short
   end
 
   def phone=(other)
+    if other == ''
+      @phone = nil
+      return
+    end
     raise ArgumentError, "arg '#{other}' is not valid for phone" unless Student.is_phone?(other)
     @phone = other
   end
 
   def mail=(other)
+    if other == ''
+      @mail = nil
+      return
+    end
     raise ArgumentError, "arg '#{other}' is not valid for mail" unless Student.is_mail?(other)
     @mail = other
   end
 
   def telegram=(other)
+    if other == ''
+      @telegram = nil
+      return
+    end
     raise ArgumentError, "arg '#{other}' is not valid for telegram" unless Student.is_telegram?(other)
     @telegram = other
   end
@@ -119,6 +131,10 @@ class Student < Student_short
   end
 
   def git=(other)
+    if other == ''
+      @git = nil
+      return
+    end
     raise ArgumentError, "arg '#{other}' is not valid for git" unless Student.is_git?(other)
     @git = other
   end

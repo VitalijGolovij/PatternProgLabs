@@ -1,18 +1,25 @@
 # frozen_string_literal: true
 require 'fox16'
 require_relative '../controller/add_student_controller'
+require_relative '../controller/edit_student_controller'
 include Fox
-class Add_student_window < FXDialogBox
+class InputStudentWindow < FXDialogBox
   attr_reader :ok_button, :name_field, :surname_field,
               :patronymic_field, :git_field, :phone_field,
               :mail_field, :telegram_field
 
-  def initialize(p)
-    super(p, 'Add student')
-    @controller = Add_student_controller.new(self)
+  def initialize(p, student = nil)
+    super(p, 'Student')
+    @controller = nil
     add_input_textfields
     add_terminating_buttons
     add_event_on_textfields
+
+    if student
+      @controller = Edit_student_controller.new(self, student)
+    else
+      @controller = Add_student_controller.new(self)
+    end
   end
 
   protected
@@ -25,7 +32,8 @@ class Add_student_window < FXDialogBox
     @ok_button = FXButton.new(buttons, "OK",
                  :opts => BUTTON_NORMAL|LAYOUT_RIGHT)
     @ok_button.connect(SEL_COMMAND) do
-      @controller.add_student
+      @controller.accept_student
+
     end
     @ok_button.state = STATE_DOWN
   end

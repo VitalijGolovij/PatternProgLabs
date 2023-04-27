@@ -19,7 +19,6 @@ class Student_list_DB < Student_list_data_worker
 
   def get_k_n_student_short_list(k, n, data_list = nil)
     if data_list
-      raise ArgumentError, "overflow indexes" if data_list.list.size < k * (n - 1) + 1
       Data_list_student_short.new(data_list.list[k * (n - 1), k])
     else
       students_list = @db_worker.select('students').map{|student_hash| Student.new(student_hash)}

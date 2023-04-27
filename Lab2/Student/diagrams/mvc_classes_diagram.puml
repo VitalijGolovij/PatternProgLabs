@@ -69,11 +69,12 @@ data_list_student_short: Data_list_student_short
 +prev_page
 +filter
 +get_all_table_pages_count
++process_filters
 }
 
-class Add_student_window
+class Input_student_window
 {
-controller: Add_student_controller
+controller: student_window_controller
 --
 -add_terminating_buttons
 -add_input_textfields
@@ -90,13 +91,37 @@ view: Add_student_window
 +get_student_hash
 }
 
+class Edit_student_controller
+{
++accept_student
+}
+
+class Edit_student_controller
+{
++student: Student
+--
++accept_student
+-set_textfields
+}
+
+class Student_window_controller
+{
+view: Input_student_window
+--
++accept_student
++check_valid
++change_button_state
+}
+
+Add_student_controller --|> Student_window_controller
+Edit_student_controller --|> Student_window_controller
 Data_list <|-- Data_list_student_short
 Student_list_controller --* Page_student
 Student_list_controller o-- Page_student
 Student_list --o Student_list_controller
 Data_list_student_short --o Student_list_controller
-Student_list_controller o-- Add_student_window
-Add_student_controller --* Add_student_window
-Add_student_controller o-- Add_student_window
+Page_student o-- Input_student_window
+Student_window_controller --* Input_student_window
+Student_window_controller o-- Input_student_window
 
 @enduml

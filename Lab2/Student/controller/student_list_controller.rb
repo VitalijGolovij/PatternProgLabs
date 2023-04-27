@@ -3,7 +3,7 @@ require_relative '../Lists_models/student_list'
 require_relative '../Lists_models/student_list_file_adapter'
 require_relative '../Lists_models/student_list_json'
 require_relative '../Lists_models/student_list_db'
-require_relative '../view/add_student_window'
+require_relative '../view/input_student_window'
 require_relative '../Lists_models/data_list_student_short'
 require 'yaml'
 require 'json'
@@ -14,21 +14,21 @@ class Student_list_controller
   attr_reader :student_list
   def initialize(view)
     @view = view
+    reset_buttons
     @students_count_on_page = 20
     @student_list = Student_list.new(Student_list_file_adapter.new(Student_list_JSON.new, 'result_files/input.json'))
     # @student_list = Student_list.new(Student_list_DB.new(YAML.load(File.open('database/config/connect_db_hash.yaml'))))
 
     @cur_table_page = 1
-    # @all_table_pages = (@student_list.get_students_count.to_f / @students_count_on_page.to_f).ceil
-
     @data_list_student_short = @student_list.get_k_n_student_short_list(@students_count_on_page, @cur_table_page)
     set_all_table_pages_count(@student_list.get_k_n_student_short_list(@student_list.get_students_count, 1))
     @data_list_student_short.add_observer(@view)
   end
 
   def refresh_data
-    @data_list_student_short.list = @student_list.get_k_n_student_short_list(@students_count_on_page, @cur_table_page, filter).list
-
+    data_list_after_filter = @student_list.get_k_n_student_short_list(@students_count_on_page, @cur_table_page, filter)
+    @data_list_student_short.list = data_list_after_filter.list
+    reset_buttons
     set_page_counter
   end
 
@@ -38,23 +38,25 @@ class Student_list_controller
   end
 
   def add_student
-    dialog_box = Add_student_window.new(@view)
+    dialog_box = InputStudentWindow.new(@view)
     dialog_box.create
     dialog_box.show(PLACEMENT_SCREEN)
-    refresh_data
   end
-
 
   def delete_student
 
   end
 
   def edit_student
-
-  end
-
-  def set_page_counter
-    @view.pages_count.text= "#{@cur_table_page}/#{@all_table_pages}"
+    if selected_one_cell?
+      selected_row = @view.table.selStartRow
+      selected_student = @student_list.get_student_by_id(@view.table.getItemText(selected_row,0))
+      dialog_box = InputStudentWindow.new(@view, selected_student)
+      dialog_box.create
+      dialog_box.show(PLACEMENT_SCREEN)
+    else
+      @view.edit_button.state = STATE_DOWN
+    end
   end
 
   def next_page
@@ -69,6 +71,39 @@ class Student_list_controller
       @cur_table_page -= 1
       refresh_data
     end
+  end
+
+  def process_select_cell
+    if @view.table.anythingSelected?
+      @view.delete_button.state = STATE_UP
+      if selected_one_cell?
+        @view.edit_button.state = STATE_UP
+      else
+        @view.edit_button.state = STATE_DOWN
+      end
+    else
+        @view.edit_button.state = STATE_DOWN
+        @view.delete_button.state = STATE_DOWN
+      end
+  end
+
+
+  protected
+  def selected_one_cell?
+    if @view.table.anythingSelected? and @view.table.selEndRow - @view.table.selStartRow == 0
+      true
+    else
+      false
+    end
+  end
+
+  def reset_buttons
+    @view.edit_button.state = STATE_DOWN
+    @view.delete_button.state = STATE_DOWN
+  end
+
+  def set_page_counter
+    @view.pages_count.text= "#{@cur_table_page}/#{@all_table_pages}"
   end
 
   def filter
@@ -104,7 +139,7 @@ class Student_list_controller
       end
     end
 
-    if is_all_filters_empty
+    if all_filters_empty?
       set_all_table_pages_count(@student_list.get_k_n_student_short_list(@student_list.get_students_count, 1))
       nil
     else
@@ -114,7 +149,7 @@ class Student_list_controller
     end
   end
 
-  def is_all_filters_empty
+  def all_filters_empty?
     (
       @view.shortname_field.text == '' and
         @view.parameters_fields['git'].text == '' and
