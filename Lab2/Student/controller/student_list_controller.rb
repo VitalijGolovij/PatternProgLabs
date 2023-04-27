@@ -19,14 +19,22 @@ class Student_list_controller
     # @student_list = Student_list.new(Student_list_DB.new(YAML.load(File.open('database/config/connect_db_hash.yaml'))))
 
     @cur_table_page = 1
-    @all_table_pages = (@student_list.get_students_count.to_f / @students_count_on_page.to_f).ceil
+    # @all_table_pages = (@student_list.get_students_count.to_f / @students_count_on_page.to_f).ceil
+
     @data_list_student_short = @student_list.get_k_n_student_short_list(@students_count_on_page, @cur_table_page)
+    set_all_table_pages_count(@student_list.get_k_n_student_short_list(@student_list.get_students_count, 1))
     @data_list_student_short.add_observer(@view)
   end
 
   def refresh_data
     @data_list_student_short.list = @student_list.get_k_n_student_short_list(@students_count_on_page, @cur_table_page, filter).list
+
     set_page_counter
+  end
+
+  def process_filters
+    @cur_table_page = 1
+    refresh_data
   end
 
   def add_student
@@ -96,19 +104,30 @@ class Student_list_controller
       end
     end
 
-    is_all_filters_empty =  !(
-      name_field_text or git_field_text or
-      phone_field_text or mail_field_text or telegram_field_text
-    )
-
     if is_all_filters_empty
+      set_all_table_pages_count(@student_list.get_k_n_student_short_list(@student_list.get_students_count, 1))
       nil
     else
-      Data_list_student_short.new(list_after_filter)
+      data_list = Data_list_student_short.new(list_after_filter)
+      set_all_table_pages_count(data_list)
+      data_list
     end
   end
 
-  def get_all_table_pages_count
+  def is_all_filters_empty
+    (
+      @view.shortname_field.text == '' and
+        @view.parameters_fields['git'].text == '' and
+        @view.parameters_fields['phone'].text == '' and
+        @view.parameters_fields['mail'].text == '' and
+        @view.parameters_fields['telegram'].text == ''
+    )
+  end
 
+  def set_all_table_pages_count(data_list_student_short)
+    @all_table_pages = (data_list_student_short.list.size.to_f / @students_count_on_page.to_f).ceil
+    if @all_table_pages == 0
+      @all_table_pages = 1
+    end
   end
 end

@@ -45,7 +45,7 @@ class Page_students < Page
     FXLabel.new(v_frame_filter, "shortname:")
     @shortname_field = FXTextField.new(v_frame_filter,15)
     @shortname_field.connect(SEL_CHANGED) do
-      @controller.refresh_data
+      @controller.process_filters
     end
     make_parameter_filter(v_frame_filter, 'git')
     make_parameter_filter(v_frame_filter,'mail')
@@ -59,7 +59,7 @@ class Page_students < Page
 
     parametr_field = FXTextField.new(parent,15, :opts => LAYOUT_SIDE_LEFT)
     parametr_field.connect(SEL_CHANGED) do
-      @controller.refresh_data
+      @controller.process_filters
     end
     parametr_field.disable
 
