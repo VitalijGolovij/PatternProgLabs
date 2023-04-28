@@ -16,8 +16,8 @@ class Student_list_controller
     @view = view
     reset_buttons
     @students_count_on_page = 20
-    @student_list = Student_list.new(Student_list_file_adapter.new(Student_list_JSON.new, 'result_files/input.json'))
-    # @student_list = Student_list.new(Student_list_DB.new(YAML.load(File.open('database/config/connect_db_hash.yaml'))))
+    # @student_list = Student_list.new(Student_list_file_adapter.new(Student_list_JSON.new, 'result_files/input.json'))
+    @student_list = Student_list.new(Student_list_DB.new(YAML.load(File.open('database/config/connect_db_hash.yaml'))))
 
     @cur_table_page = 1
     @data_list_student_short = @student_list.get_k_n_student_short_list(@students_count_on_page, @cur_table_page)
@@ -44,11 +44,20 @@ class Student_list_controller
   end
 
   def delete_student
+    if @view.table.anythingSelected? and !selected_empty_row?
+      first_selected = @view.table.selStartRow
+      last_selected = @view.table.selEndRow
 
+      (first_selected..last_selected).each do |selected_row|
+        @student_list.drop_by_id(@view.table.getItemText(selected_row,0))
+      end
+
+      refresh_data
+    end
   end
 
   def edit_student
-    if selected_one_cell?
+    if selected_one_row? and !selected_empty_row?
       selected_row = @view.table.selStartRow
       selected_student = @student_list.get_student_by_id(@view.table.getItemText(selected_row,0))
       dialog_box = InputStudentWindow.new(@view, selected_student)
@@ -74,9 +83,9 @@ class Student_list_controller
   end
 
   def process_select_cell
-    if @view.table.anythingSelected?
+    if @view.table.anythingSelected? and !selected_empty_row?
       @view.delete_button.state = STATE_UP
-      if selected_one_cell?
+      if selected_one_row?
         @view.edit_button.state = STATE_UP
       else
         @view.edit_button.state = STATE_DOWN
@@ -89,7 +98,18 @@ class Student_list_controller
 
 
   protected
-  def selected_one_cell?
+  def selected_empty_row?
+    first_selected = @view.table.selStartRow
+    last_selected = @view.table.selEndRow
+
+    (first_selected..last_selected).each do |selected_row|
+      if @view.table.getItemText(selected_row,0) == ''
+        return true
+      end
+    end
+    false
+  end
+  def selected_one_row?
     if @view.table.anythingSelected? and @view.table.selEndRow - @view.table.selStartRow == 0
       true
     else
