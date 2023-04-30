@@ -9,7 +9,8 @@ include Fox
 class Page_students < Page
   attr_reader :parameters_fields, :table, :pages_count,
               :controller, :shortname_field, :add_button,
-              :delete_button, :edit_button
+              :delete_button, :edit_button, :edit_git_button,
+              :edit_name_button, :edit_contact_button
   def initialize(parent)
     super(parent, 'students list')
     @parameters_fields = Hash.new
@@ -17,6 +18,7 @@ class Page_students < Page
     make_filter_area(main_frame)
     make_table_area(main_frame)
     make_manage_buttons(main_frame)
+    reset_buttons
 
     @controller = Student_list_controller.new(self)
     @controller.refresh_data
@@ -40,13 +42,111 @@ class Page_students < Page
     @table.setColumnWidth(0,60)
   end
 
+  def reset_buttons
+    @edit_name_button.state = STATE_DOWN
+    @edit_git_button.state = STATE_DOWN
+    @edit_contact_button.state = STATE_DOWN
+    @delete_button.state = STATE_DOWN
+  end
+
+  def get_id_selected_student(num_selected_row)
+    @table.getItemText(num_selected_row,0)
+  end
+
+  def get_sel_start_row
+    @table.selStartRow
+  end
+
+  def get_sel_end_row
+    @table.selEndRow
+  end
+
+  def set_pages_counter(cur_page, pages_count)
+    @pages_count.text = "#{cur_page}/#{pages_count}"
+  end
+
   protected
+  def add_student
+    @controller.add_student
+  end
+
+  def edit_name
+    if selected_one_row? and !selected_empty_row?
+      @controller.edit_student('name')
+    end
+  end
+
+  def edit_git
+    if selected_one_row? and !selected_empty_row?
+      @controller.edit_student('git')
+    end
+  end
+
+  def edit_contact
+    if selected_one_row? and !selected_empty_row?
+      @controller.edit_student('contact')
+    end
+  end
+
+  def delete_student
+    @controller.delete_student
+  end
+
+  def process_filters
+    @controller.process_filters
+  end
+
+  def process_select_cell
+    if @table.anythingSelected? and !selected_empty_row?
+      @delete_button.state = STATE_UP
+      if selected_one_row?
+        @edit_git_button.state = STATE_UP
+        @edit_name_button.state = STATE_UP
+        @edit_contact_button.state = STATE_UP
+      else
+        @edit_git_button.state = STATE_DOWN
+        @edit_name_button.state = STATE_DOWN
+        @edit_contact_button.state = STATE_DOWN
+      end
+    else
+      reset_buttons
+    end
+  end
+
+  def next_page
+    @controller.next_page
+  end
+
+  def prev_page
+    @controller.prev_page
+  end
+
+  def selected_empty_row?
+    first_selected = @table.selStartRow
+    last_selected = @table.selEndRow
+
+    (first_selected..last_selected).each do |selected_row|
+      if @table.getItemText(selected_row,0) == ''
+        return true
+      end
+    end
+    false
+  end
+
+  def selected_one_row?
+    if @table.anythingSelected? and @table.selEndRow - @table.selStartRow == 0
+      true
+    else
+      false
+    end
+  end
+
   def make_filter_area(parent)
     v_frame_filter = FXVerticalFrame.new(parent)
     FXLabel.new(v_frame_filter, "shortname:")
     @shortname_field = FXTextField.new(v_frame_filter,15)
     @shortname_field.connect(SEL_CHANGED) do
-      @controller.process_filters
+      process_filters
     end
     make_parameter_filter(v_frame_filter, 'git')
     make_parameter_filter(v_frame_filter,'mail')
@@ -60,7 +160,7 @@ class Page_students < Page
 
     parametr_field = FXTextField.new(parent,15, :opts => LAYOUT_SIDE_LEFT)
     parametr_field.connect(SEL_CHANGED) do
-      @controller.process_filters
+      process_filters
     end
     parametr_field.disable
 
@@ -81,7 +181,7 @@ class Page_students < Page
     table_packer = FXPacker.new(v_frame_table)
     @table = FXTable.new(table_packer, :opts => LAYOUT_EXPLICIT, :width => 701, :height => 422)
     @table.connect(SEL_SELECTED) do
-      @controller.process_select_cell
+      process_select_cell
     end
     buttons_packer = FXPacker.new(v_frame_table, :opts => LAYOUT_FILL)
     hframe = FXHorizontalFrame.new(buttons_packer,
@@ -89,12 +189,12 @@ class Page_students < Page
     next_button = FXButton.new(hframe, ">" ,
                                :opts => BUTTON_NORMAL|LAYOUT_RIGHT)
     next_button.connect(SEL_COMMAND) do
-      @controller.next_page
+      next_page
     end
     prev_button = FXButton.new(hframe, "<" ,
                                :opts => BUTTON_NORMAL|LAYOUT_LEFT)
     prev_button.connect(SEL_COMMAND) do
-      @controller.prev_page
+      prev_page
     end
     @pages_count = FXLabel.new(hframe, "",
                               :opts=> LAYOUT_CENTER_X)
@@ -104,16 +204,23 @@ class Page_students < Page
     v_frame = FXVerticalFrame.new(parent, :opts => LAYOUT_FILL | PACK_UNIFORM_WIDTH)
     @add_button = FXButton.new(v_frame, 'Add')
     @add_button.connect(SEL_COMMAND) do
-      @controller.add_student
+      add_student
     end
-    @edit_button = FXButton.new(v_frame, 'Edit')
-    @edit_button.connect(SEL_COMMAND) do
-      @controller.edit_student
-      @controller.refresh_data
+    @edit_name_button = FXButton.new(v_frame, 'Edit name')
+    @edit_name_button.connect(SEL_COMMAND) do
+      edit_name
+    end
+    @edit_git_button = FXButton.new(v_frame, 'Edit git')
+    @edit_git_button.connect(SEL_COMMAND) do
+      edit_git
+    end
+    @edit_contact_button = FXButton.new(v_frame, 'Edit contact')
+    @edit_contact_button.connect(SEL_COMMAND) do
+      edit_contact
     end
     @delete_button = FXButton.new(v_frame, 'Delete')
     @delete_button.connect(SEL_COMMAND) do
-      @controller.delete_student
+      delete_student
     end
   end
 end
