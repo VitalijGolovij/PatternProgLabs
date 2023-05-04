@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class Student_window_controller
-  def initialize(view)
+  def initialize
+    @view = nil
+  end
+
+  def view=(view)
     @view = view
   end
 
@@ -10,33 +14,33 @@ class Student_window_controller
   end
 
   def change_button_state
-    if check_valid
-      @view.ok_button.state = STATE_UP
+    if fields_valid?
+      @view.ok_button_up
     else
-      @view.ok_button.state = STATE_DOWN
+      @view.ok_button_down
     end
   end
 
-  def check_valid
-    return false unless Student.is_name?(@view.name_field.text)
-    return false unless Student.is_name?(@view.surname_field.text)
-    return false unless Student.is_name?(@view.patronymic_field.text)
-    return false unless Student.is_git?(@view.git_field.text) or @view.git_field.text == ""
-    return false unless Student.is_phone?(@view.phone_field.text) or @view.phone_field.text == ""
-    return false unless Student.is_mail?(@view.mail_field.text) or @view.mail_field.text == ""
-    return false unless Student.is_telegram?(@view.telegram_field.text) or @view.telegram_field.text == ""
+  def fields_valid?
+    return false unless Student.is_name?(@view.get_name_text)
+    return false unless Student.is_name?(@view.get_surname_text)
+    return false unless Student.is_name?(@view.get_patronymic_text)
+    return false unless Student.is_git?(@view.get_git_text) or @view.get_git_text == ""
+    return false unless Student.is_phone?(@view.get_phone_text) or @view.get_phone_text == ""
+    return false unless Student.is_mail?(@view.get_mail_text) or @view.get_mail_text == ""
+    return false unless Student.is_telegram?(@view.get_telegram_text) or @view.get_telegram_text == ""
     true
   end
 
   def get_student_hash
     {
-      "name": @view.name_field.text,
-      "surname": @view.surname_field.text,
-      "patronymic": @view.patronymic_field.text,
-      "git": @view.git_field.text == ''? nil : @view.git_field.text,
-      "phone": @view.phone_field.text == ''? nil : @view.phone_field.text,
-      "mail": @view.mail_field.text == ''? nil : @view.mail_field.text,
-      "telegram": @view.telegram_field.text == ''? nil : @view.telegram_field.text
+      "name": @view.get_name_text,
+      "surname": @view.get_surname_text,
+      "patronymic": @view.get_patronymic_text,
+      "git": @view.get_git_text == ''? nil : @view.get_git_text,
+      "phone": @view.get_phone_text == ''? nil : @view.get_phone_text,
+      "mail": @view.get_mail_text == ''? nil : @view.get_mail_text,
+      "telegram": @view.get_telegram_text == ''? nil : @view.get_telegram_text
     }
   end
 end

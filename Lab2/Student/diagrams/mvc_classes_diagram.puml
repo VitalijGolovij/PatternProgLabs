@@ -77,9 +77,9 @@ all_table_pages: Integer
 data_list_student_short: Data_list_student_short
 --
 +refresh_data
-+add_student
++add_student(Input_student_window_fabric)
 +delete_student
-+edit_student
++edit_student(Input_student_window_fabric)
 +set_page_counter
 +next_page
 +prev_page
@@ -127,10 +127,68 @@ class Student_window_controller
 {
 view: Input_student_window
 --
++view=(Input_student_window)
 +accept_student
 +check_valid
 +change_button_state
 }
+
+class Add_student_window
+{
+
+}
+
+class Edit_student_contact_window
+{
+--
+-block_fields
+-set_color
+}
+
+class Edit_student_name_window
+{
+--
+-block_fields
+-set_color
+}
+
+class Edit_student_git_window
+{
+--
+-block_fields
+-set_color
+}
+
+class Input_student_window_fabric
+{
+--
+{static} create
+}
+
+class Add_student_fabric
+{
+--
+create(Page_student): Add_student_window
+}
+
+class Edit_student_name_fabric
+{
+--
+create(Page_student, Student): Edit_student_name_window
+}
+
+class Edit_student_git_fabric
+{
+--
+create(Page_student, Student): Edit_student_git_window
+}
+
+class Edit_student_contacts_fabric
+{
+--
+create(Page_student, Student): Edit_student_contacts_window
+}
+
 
 Add_student_controller --|> Student_window_controller
 Edit_student_controller --|> Student_window_controller
@@ -142,5 +200,15 @@ Data_list_student_short --o Student_list_controller
 Page_student o-- Input_student_window
 Student_window_controller --* Input_student_window
 Student_window_controller o-- Input_student_window
+
+Input_student_window_fabric <|-- Add_student_fabric
+Input_student_window_fabric <|-- Edit_student_name_fabric
+Input_student_window_fabric <|-- Edit_student_git_fabric
+Input_student_window_fabric <|-- Edit_student_contacts_fabric
+
+Input_student_window <|-- Add_student_window
+Input_student_window <|-- Edit_student_name_window
+Input_student_window <|-- Edit_student_git_window
+Input_student_window <|-- Edit_student_contact_window
 
 @enduml

@@ -8,21 +8,92 @@ class InputStudentWindow < FXDialogBox
               :patronymic_field, :git_field, :phone_field,
               :mail_field, :telegram_field
 
-  def initialize(p, student = nil)
+  def initialize(p)
     super(p, 'Student')
     @controller = nil
     add_input_textfields
     add_terminating_buttons
     add_event_on_textfields
+    block_fields
+    set_color
+  end
 
-    if student
-      @controller = Edit_student_controller.new(self, student)
-    else
-      @controller = Add_student_controller.new(self)
-    end
+  def controller=(controller)
+    @controller = controller
+  end
+
+  def ok_button_up
+    @ok_button.state = STATE_UP
+  end
+
+  def ok_button_down
+    @ok_button.state = STATE_DOWN
+  end
+
+  def get_name_text
+    @name_field.text
+  end
+
+  def get_surname_text
+    @surname_field.text
+  end
+
+  def get_patronymic_text
+    @patronymic_field.text
+  end
+
+  def get_git_text
+    @git_field.text
+  end
+
+  def get_phone_text
+    @phone_field.text
+  end
+
+  def get_mail_text
+    @mail_field.text
+  end
+
+  def get_telegram_text
+    @telegram_field.text
+  end
+
+  def set_name_text(text)
+    @name_field.text = text
+  end
+
+  def set_surname_text(text)
+    @surname_field.text = text
+  end
+
+  def set_patronymic_text(text)
+    @patronymic_field.text = text
+  end
+
+  def set_git_text(text)
+    @git_field.text = text
+  end
+
+  def set_phone_text(text)
+    @phone_field.text = text
+  end
+
+  def set_mail_text(text)
+    @mail_field.text = text
+  end
+
+  def set_telegram_text(text)
+    @telegram_field.text = text
   end
 
   protected
+  def block_fields
+
+  end
+
+  def set_color
+
+  end
   def add_terminating_buttons
     buttons = FXHorizontalFrame.new(self,
                                     :opts => LAYOUT_FILL_X|LAYOUT_SIDE_BOTTOM|PACK_UNIFORM_WIDTH)

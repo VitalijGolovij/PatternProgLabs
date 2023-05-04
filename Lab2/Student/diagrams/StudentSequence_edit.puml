@@ -6,17 +6,19 @@
 actor       User                                as user
 boundary    "sp: Student_page"                  as sp
 control     "slc: Student_list_controller"      as slc
-boundary    "asw: Input_student_window"           as asw
-boundary    "asc: Edit_student_controller"       as asc
+boundary    "Edit_student_name_fabric"          as esnf
+boundary    "asw: Edit_student_name_window"     as asw
+boundary    "asc: Edit_student_controller"      as asc
 entity      "sl: Student_list"                  as sl
 entity      "dlss: Data_list_student_short"     as dlss
 
 user -> sp : click "edit" button
 sp -> slc : edit_student
-slc -> asw : <<new>>
-asw -> asc : <<new>>
+slc -> esnf : create
+esnf -> asc : <<new>>
 asc -> asc : set_textfields
-user <-- asc :
+esnf <-- asc :
+user <-- esnf
 user -> asw : click <<Ok>>
 asw -> asc : accept_student
 asc -> asc :check valid

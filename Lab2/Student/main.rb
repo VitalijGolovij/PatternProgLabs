@@ -32,5 +32,4 @@ include Fox
 # test_list2 = Student_list.new(Student_list_file_adapter.new(Student_list_JSON.new, 'result_files/input.json'))
 # puts test_list2.get_k_n_student_short_list(20,3).list
 
-puts 'Йажавид В. В.'.include?('З')
 #k-длина списка n-пачка посчету

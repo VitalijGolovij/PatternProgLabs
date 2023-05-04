@@ -39,8 +39,8 @@ class Student_list_controller
     refresh_data
   end
 
-  def add_student
-    dialog_box = Input_student_window_fabric.create_window(@view)
+  def add_student(input_student_window_fabric)
+    dialog_box = input_student_window_fabric.create(@view)
     dialog_box.create
     dialog_box.show(PLACEMENT_SCREEN)
   end
@@ -56,10 +56,10 @@ class Student_list_controller
     refresh_data
   end
 
-  def edit_student(type)
+  def edit_student(input_student_window_fabric)
     selected_row = @view.get_sel_start_row
-    selected_student = @student_list.get_student_by_id(@view.get_id_selected_student(selected_row,0))
-    dialog_box = Input_student_window_fabric.create_window(@view,selected_student, type)
+    selected_student = @student_list.get_student_by_id(@view.get_id_selected_student(selected_row))
+    dialog_box = input_student_window_fabric.create(@view, selected_student)
     dialog_box.create
     dialog_box.show(PLACEMENT_SCREEN)
   end
@@ -81,7 +81,7 @@ class Student_list_controller
   protected
   def get_student_from_row
     selected_row = @view.get_sel_start_row
-    @student_list.get_student_by_id(@view.get_id_selected_student(selected_row,0))
+    @student_list.get_student_by_id(@view.get_id_selected_student(selected_row))
   end
 
   def set_page_counter

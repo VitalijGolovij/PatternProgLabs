@@ -2,14 +2,18 @@
 require_relative 'student_window_controller'
 
 class Edit_student_controller < Student_window_controller
-  def initialize(view, student)
-    @view = view
+  def initialize(student)
+    @view = nil
     @student = student
+  end
+
+  def view=(view)
+    super
     set_textfields
   end
 
   def accept_student
-    if check_valid
+    if fields_valid?
       new_student = Student.new(get_student_hash)
       @view.owner.controller.student_list.replace_by_id(@student.id, new_student)
       @view.owner.controller.refresh_data
@@ -21,12 +25,12 @@ class Edit_student_controller < Student_window_controller
 
   protected
   def set_textfields
-    @view.name_field.text = @student.name
-    @view.surname_field.text = @student.surname
-    @view.patronymic_field.text = @student.patronymic
-    @view.git_field.text = @student.git
-    @view.phone_field.text = @student.phone
-    @view.mail_field.text = @student.mail
-    @view.telegram_field.text = @student.telegram
+    @view.set_name_text(@student.name)
+    @view.set_surname_text(@student.surname)
+    @view.set_patronymic_text(@student.patronymic)
+    @view.set_git_text(@student.git)
+    @view.set_phone_text(@student.phone)
+    @view.set_mail_text(@student.mail)
+    @view.set_telegram_text(@student.telegram)
   end
 end

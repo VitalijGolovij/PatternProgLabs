@@ -5,7 +5,7 @@ require_relative 'student_window_controller'
 class Add_student_controller < Student_window_controller
 
   def accept_student
-    if check_valid
+    if fields_valid?
       @view.owner.controller.student_list.insert_student(Student.new(get_student_hash))
       @view.owner.controller.refresh_data
       @view.close

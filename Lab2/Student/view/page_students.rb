@@ -3,6 +3,10 @@ require_relative 'page'
 require_relative '../Lists_models/student_list_file'
 require_relative '../Lists_models/student_list_json'
 require_relative '../controller/student_list_controller'
+require_relative 'add_student_fabric'
+require_relative 'edit_student_name_fabric'
+require_relative 'edit_student_git_fabric'
+require_relative 'edit_student_contacts_fabric'
 require 'fox16'
 include Fox
 
@@ -67,24 +71,24 @@ class Page_students < Page
 
   protected
   def add_student
-    @controller.add_student
+    @controller.add_student(Add_student_fabric)
   end
 
   def edit_name
     if selected_one_row? and !selected_empty_row?
-      @controller.edit_student('name')
+      @controller.edit_student(Edit_student_name_fabric)
     end
   end
 
   def edit_git
     if selected_one_row? and !selected_empty_row?
-      @controller.edit_student('git')
+      @controller.edit_student(Edit_student_git_fabric)
     end
   end
 
   def edit_contact
     if selected_one_row? and !selected_empty_row?
-      @controller.edit_student('contact')
+      @controller.edit_student(Edit_student_contacts_fabric)
     end
   end
 
