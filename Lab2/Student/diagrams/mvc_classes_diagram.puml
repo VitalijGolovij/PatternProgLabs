@@ -98,6 +98,22 @@ controller: student_window_controller
 -add_terminating_buttons
 -add_input_textfields
 -add_event_on_textfields
+-block_fields
+-set_color
++ok_button_up
++ok_button_down
++get_name_text
++get_patronymic_text
++get_git_text
++get_mail_text
++get_telegram_text
++get_phone_text
++set_name_text
++set_patronymic_text
++set_git_text
++set_mail_text
++set_telegram_text
++set_phone_text
 }
 
 class Add_student_controller
